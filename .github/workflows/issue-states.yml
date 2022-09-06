@@ -1,7 +1,7 @@
 name: 'Issue States'
 
 on:
-  issues:
+  project_card:
     types: [created, edited, moved]
 
 permissions:
@@ -18,4 +18,4 @@ jobs:
           github-token: ${{ github.token }}
           open-issue-columns: ''
           closed-issue-columns: 'Closed'
-          log-output: false
+          log-output: true
