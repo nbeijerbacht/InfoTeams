@@ -4,6 +4,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Microsoft.TeamsFx.Conversation;
 using Newtonsoft.Json;
+using AdaptiveCards;
 
 namespace ZenyaBot.Commands
 {
@@ -31,6 +32,10 @@ namespace ZenyaBot.Commands
 
         public async Task<ICommandResponse> HandleCommandAsync(ITurnContext turnContext, CommandMessage message, CancellationToken cancellationToken = default)
         {
+            HttpClient client = new HttpClient();
+            var path = "https://localhost:7242/";
+            var response = await client.GetAsync(path);
+
             var searchString = message.Text.Substring(commandName.Length).Trim();
 
             _logger?.LogInformation($"Bot received search: {searchString}");
@@ -55,7 +60,7 @@ namespace ZenyaBot.Commands
                 new Attachment
                 {
                     ContentType = "application/vnd.microsoft.card.adaptive",
-                    Content = JsonConvert.DeserializeObject(cardContent),
+                    Content = await response.Content.ReadAsStringAsync(),
                 }
             );
 
