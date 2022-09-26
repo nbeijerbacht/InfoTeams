@@ -42,11 +42,10 @@ public class FormController : ControllerBase
                     Size = AdaptiveTextSize.Medium,
                 },
             }
-        }).Select(ac => ac.ToJson());
+        }.ToJson());
 
         return new SearchResultDTO
         {
-            // Fix escaped sctring here 
             Results = adaptiveCards,
         };
 

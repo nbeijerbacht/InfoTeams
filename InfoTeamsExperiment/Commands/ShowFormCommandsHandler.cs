@@ -3,6 +3,7 @@ using Microsoft.Bot.Schema;
 using Microsoft.TeamsFx.Conversation;
 using Newtonsoft.Json;
 using AdaptiveCards;
+using ZenyaBot.DTO;
 
 namespace ZenyaBot.Commands
 {
@@ -32,18 +33,18 @@ namespace ZenyaBot.Commands
         {
 
             var searchString = message.Text.Substring(commandName.Length).Trim();
-
-
-            HttpClient client = new HttpClient();
-            var path = "https://localhost:7242/";
-            var response = await client.GetAsync(path);
-
             _logger?.LogInformation($"Bot received search: {searchString}");
 
-            var json = await response.Content.ReadAsStringAsync();
-            var form_data = JsonConvert.DeserializeObject<object>(json);
 
-            var card = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0));
+            var client = new HttpClient();
+            var path = "https://localhost:7072/form?search=" + searchString;
+            var response = await client.GetAsync(path);
+
+
+            var json = await response.Content.ReadAsStringAsync();
+            var adaptiveCards = JsonConvert.DeserializeObject<SearchResult>(json);
+
+            var parsedCard = AdaptiveCard.FromJson(adaptiveCards.Results[0]);
 
             // Build attachment
             var activity = MessageFactory.Attachment
@@ -51,10 +52,9 @@ namespace ZenyaBot.Commands
                 new Attachment
                 {
                     ContentType = AdaptiveCard.ContentType,
-                    Content = card,
+                    Content = parsedCard.Card,
                 }
             );
-
             return new ActivityCommandResponse(activity);
         }
     }

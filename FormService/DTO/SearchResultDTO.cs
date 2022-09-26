@@ -1,4 +1,6 @@
-﻿namespace FormService.DTO;
+﻿using AdaptiveCards;
+
+namespace FormService.DTO;
 
 public class SearchResultDTO
 {
