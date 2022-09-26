@@ -1,2 +1,4 @@
 [oO]bj/
 [bB]in/
+.vs/**
+*.csproj.user

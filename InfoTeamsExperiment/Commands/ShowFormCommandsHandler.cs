@@ -1,6 +1,4 @@
-﻿using ZenyaBot.Models;
-using AdaptiveCards.Templating;
-using Microsoft.Bot.Builder;
+﻿using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Microsoft.TeamsFx.Conversation;
 using Newtonsoft.Json;
@@ -32,39 +30,31 @@ namespace ZenyaBot.Commands
 
         public async Task<ICommandResponse> HandleCommandAsync(ITurnContext turnContext, CommandMessage message, CancellationToken cancellationToken = default)
         {
+
+            var searchString = message.Text.Substring(commandName.Length).Trim();
+
+
             HttpClient client = new HttpClient();
             var path = "https://localhost:7242/";
             var response = await client.GetAsync(path);
 
-            var searchString = message.Text.Substring(commandName.Length).Trim();
-
             _logger?.LogInformation($"Bot received search: {searchString}");
 
+            var json = await response.Content.ReadAsStringAsync();
+            var form_data = JsonConvert.DeserializeObject<object>(json);
 
-            // Read adaptive card template
-            var cardTemplate = await File.ReadAllTextAsync(_adaptiveCardFilePath, cancellationToken);
-
-            // Render adaptive card content
-            var cardContent = new AdaptiveCardTemplate(cardTemplate).Expand
-            (
-                new HelloWorldModel
-                {
-                    Title = $"You searched for \"{searchString}\".",
-                    Body = "",
-                }
-            );
+            var card = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0));
 
             // Build attachment
             var activity = MessageFactory.Attachment
             (
                 new Attachment
                 {
-                    ContentType = "application/vnd.microsoft.card.adaptive",
-                    Content = await response.Content.ReadAsStringAsync(),
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = card,
                 }
             );
 
-            // send response
             return new ActivityCommandResponse(activity);
         }
     }
