@@ -44,17 +44,14 @@ namespace ZenyaBot.Commands
             var json = await response.Content.ReadAsStringAsync();
             var adaptiveCards = JsonConvert.DeserializeObject<SearchResult>(json);
 
-            var parsedCard = AdaptiveCard.FromJson(adaptiveCards.Results[0]);
+            var attachments = adaptiveCards.Results.Select(acJsonString => new Attachment
+            {
+                ContentType = AdaptiveCard.ContentType,
+                Content = AdaptiveCard.FromJson(acJsonString).Card,
+            });
 
             // Build attachment
-            var activity = MessageFactory.Attachment
-            (
-                new Attachment
-                {
-                    ContentType = AdaptiveCard.ContentType,
-                    Content = parsedCard.Card,
-                }
-            );
+            var activity = MessageFactory.Attachment(attachments);
             return new ActivityCommandResponse(activity);
         }
     }
