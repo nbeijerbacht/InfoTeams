@@ -1,4 +1,6 @@
-﻿namespace ZenyaFacadeService.DTO
+﻿using FormService.DTO;
+
+namespace ZenyaFacadeService.DTO
 {
     public class FormDTO
     {
@@ -8,5 +10,6 @@
         public string language { get; set; }
         public int form_id { get; set; }
         public string title { get; set; }
+        public Design design { get; set; }
     }
 }

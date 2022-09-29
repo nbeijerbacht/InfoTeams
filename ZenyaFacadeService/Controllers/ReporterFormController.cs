@@ -31,5 +31,20 @@ namespace ZenyaFacadeService.Controllers
 
             return form_data.Where(f => f.title.Contains(search) || f.description.Contains(search));
         }
+
+        [HttpGet(Name = "FormById")]
+        [Route("{form_id:int}")]
+        public async Task<FormDTO> FormById(int form_id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var path = $"https://msteams.zenya.work/api/cases/reporter_forms/{form_id}?include_design=true";
+
+            var response = await client.GetAsync(path);
+
+            var json = await response.Content.ReadAsStringAsync();
+            var form_data = JsonConvert.DeserializeObject<FormDTO>(json);
+
+            return form_data;
+        }
     }
 }
