@@ -8,5 +8,5 @@ public class ReportFormDTO
     public string language { get; set; }
     public int form_id { get; set; }
     public string title { get; set; }
+    public DesignDTO design { get; set; }
 }
-

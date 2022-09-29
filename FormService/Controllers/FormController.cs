@@ -50,4 +50,19 @@ public class FormController : ControllerBase
         };
 
     }
+
+    [HttpGet(Name = "FormById")]
+    [Route("{form_id:int}")]
+    public async Task<ReportFormDTO> GetFormById(int form_id)
+    {
+        var client = this._httpClientFactory.CreateClient();
+
+        var response = await client.GetAsync($"https://localhost:7071/reporterForm/{form_id}");
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        _logger.LogInformation(json);
+
+        return new ReportFormDTO();
+    }
 }
