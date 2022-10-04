@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using ZenyaFacadeService.DTO;
 
 namespace ZenyaFacadeService.Controllers
@@ -18,7 +19,7 @@ namespace ZenyaFacadeService.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [HttpGet(Name = "SearchThroughForms")]
+        [HttpGet]
         public async Task<IEnumerable<FormDTO>> SearchThroughForms([FromQuery(Name = "search")] string search)
         {
             var client = _httpClientFactory.CreateClient();
@@ -32,7 +33,7 @@ namespace ZenyaFacadeService.Controllers
             return form_data.Where(f => f.title.Contains(search) || f.description.Contains(search));
         }
 
-        [HttpGet(Name = "FormById")]
+        [HttpGet]
         [Route("{form_id:int}")]
         public async Task<FormDTO> FormById(int form_id)
         {

@@ -18,7 +18,7 @@ public class FormController : ControllerBase
         _httpClientFactory = httpClientFactory;
     }
 
-    [HttpGet(Name = "SearchThroughForms")]
+    [HttpGet]
     public async Task<SearchResultDTO> Search([FromQuery(Name = "search")] string search)
     {
         var client = this._httpClientFactory.CreateClient();
@@ -51,9 +51,9 @@ public class FormController : ControllerBase
 
     }
 
-    [HttpGet(Name = "FormById")]
+    [HttpGet]
     [Route("{form_id:int}")]
-    public async Task<ReportFormDTO> GetFormById(int form_id)
+    public async Task<FormResultDTO> GetFormById(int form_id)
     {
         var client = this._httpClientFactory.CreateClient();
 
@@ -61,8 +61,46 @@ public class FormController : ControllerBase
 
         var json = await response.Content.ReadAsStringAsync();
 
-        _logger.LogInformation(json);
+        var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
 
-        return new ReportFormDTO();
+        var adaptiveCard = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
+        {
+            Body = new List<AdaptiveElement>()
+        };
+
+        foreach (Element e in formData.design.elements)
+        {
+            if(e.element_type != "field")
+            {
+                var textblock = new AdaptiveTextBlock
+                {
+                    Text = e.text,
+                    Size = AdaptiveTextSize.Large,
+                };
+                adaptiveCard.Body.Add(textblock);
+            }
+            else
+            {
+                if (e.field.type == "text")
+                {
+                    var textblock = new AdaptiveTextBlock
+                    {
+                        Text = e.text
+                    };
+                    var inputblock = new AdaptiveTextInput();
+                    adaptiveCard.Body.Add(textblock);
+                    adaptiveCard.Body.Add(inputblock);
+                }
+            }
+        }
+
+        var result = adaptiveCard.ToJson();
+
+        _logger.LogInformation(result);
+
+        return new FormResultDTO
+        {
+            Result = result,
+        };
     }
 }
