@@ -1,7 +1,7 @@
 ﻿using AdaptiveCards;
 using FormService.DTO;
 
-namespace FormService.Models;
+namespace FormService.Logic;
 
 public class TextFieldRenderer : IElementRenderer
 {
@@ -13,6 +13,6 @@ public class TextFieldRenderer : IElementRenderer
         {
             Text = e.text
         };
-        yield return new AdaptiveTextInput();
+        yield return new AdaptiveTextInput() { Id = e.element_id.ToString() };
     }
 }
