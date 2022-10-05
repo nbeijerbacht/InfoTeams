@@ -1,5 +1,6 @@
 using AdaptiveCards;
 using FormService.DTO;
+using FormService.Logic;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -11,11 +12,13 @@ public class FormController : ControllerBase
 {
     private readonly ILogger<FormController> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IAdaptiveCardRenderer rederer;
 
-    public FormController(ILogger<FormController> logger, IHttpClientFactory httpClientFactory)
+    public FormController(ILogger<FormController> logger, IHttpClientFactory httpClientFactory, IAdaptiveCardRenderer rederer)
     {
         _logger = logger;
         _httpClientFactory = httpClientFactory;
+        this.rederer = rederer;
     }
 
     [HttpGet]
@@ -63,38 +66,7 @@ public class FormController : ControllerBase
 
         var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
 
-        var adaptiveCard = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
-        {
-            Body = new List<AdaptiveElement>()
-        };
-
-        foreach (Element e in formData.design.elements)
-        {
-            if(e.element_type != "field")
-            {
-                var textblock = new AdaptiveTextBlock
-                {
-                    Text = e.text,
-                    Size = AdaptiveTextSize.Large,
-                };
-                adaptiveCard.Body.Add(textblock);
-            }
-            else
-            {
-                if (e.field.type == "text")
-                {
-                    var textblock = new AdaptiveTextBlock
-                    {
-                        Text = e.text
-                    };
-                    var inputblock = new AdaptiveTextInput();
-                    adaptiveCard.Body.Add(textblock);
-                    adaptiveCard.Body.Add(inputblock);
-                }
-            }
-        }
-
-        var result = adaptiveCard.ToJson();
+        var result = rederer.Render(formData).ToJson();
 
         _logger.LogInformation(result);
 
