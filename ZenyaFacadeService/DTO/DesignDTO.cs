@@ -35,5 +35,19 @@ namespace FormService.DTO
         public bool? only_leaves { get; set; }
         public string initial_state { get; set; }
         public bool? hide_on_new_report { get; set; }
+
+        // only for dropdowns
+        public List<ListItem>? list_items { get; set; }
+
+        // Only present for numeric fields
+        public double? min_numeric_value { get; set; }
+        public double? max_numeric_value { get; set; }
     }
+
+    public class ListItem
+    {
+        public int list_item_id { get; set; }
+        public string name { get; set; }
+    }
+
 }
