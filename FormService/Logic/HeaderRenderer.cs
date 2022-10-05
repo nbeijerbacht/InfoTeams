@@ -1,7 +1,7 @@
 ﻿using AdaptiveCards;
 using FormService.DTO;
 
-namespace FormService.Models;
+namespace FormService.Logic;
 
 public class HeaderRenderer : IElementRenderer
 {
