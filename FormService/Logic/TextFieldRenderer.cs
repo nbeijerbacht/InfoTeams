@@ -5,7 +5,7 @@ namespace FormService.Logic;
 
 public class TextFieldRenderer : IElementRenderer
 {
-    public bool CanHandle(Element e) => e.element_type == "field" && e.field.type == "text";
+    public bool CanHandle(Element e) => e is { element_type: "field", field.type: "text" };
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)
     {

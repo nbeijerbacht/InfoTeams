@@ -7,6 +7,8 @@ builder.Services.AddSingleton<IAdaptiveCardRenderer, AdaptiveCardRenderer>();
 builder.Services.AddSingleton<IElementRenderer, HeaderRenderer>();
 builder.Services.AddSingleton<IElementRenderer, TextFieldRenderer>();
 builder.Services.AddSingleton<IElementRenderer, IgnoreRenderer>();
+builder.Services.AddSingleton<IElementRenderer, DateFieldRenderer>();
+builder.Services.AddSingleton<IElementRenderer, NumericFieldRenderer>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
