@@ -1,6 +1,13 @@
+using FormService.Logic;
+using FormService.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IAdaptiveCardRenderer, AdaptiveCardRenderer>();
+builder.Services.AddSingleton<IElementRenderer, HeaderRenderer>();
+builder.Services.AddSingleton<IElementRenderer, TextFieldRenderer>();
+builder.Services.AddSingleton<IElementRenderer, IgnoreRenderer>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
