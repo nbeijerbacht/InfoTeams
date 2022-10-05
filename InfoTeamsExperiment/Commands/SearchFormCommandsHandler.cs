@@ -32,7 +32,6 @@ public class SearchFormCommandsHandler : ITeamsCommandHandler
 
     public async Task<ICommandResponse> HandleCommandAsync(ITurnContext turnContext, CommandMessage message, CancellationToken cancellationToken = default)
     {
-
         var searchString = message.Text.Substring(commandName.Length).Trim();
         _logger?.LogInformation($"Bot received search: {searchString}");
 
@@ -41,8 +40,30 @@ public class SearchFormCommandsHandler : ITeamsCommandHandler
         var response = await client.GetAsync(path);
 
 
-        var json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync(cancellationToken);
         var adaptiveCards = JsonConvert.DeserializeObject<SearchResultDTO>(json);
+
+        if (adaptiveCards.Results.Count == 0)
+        {
+            var card = new AdaptiveCard(new AdaptiveSchemaVersion(1, 1))
+            {
+                Body =
+                {
+                    new AdaptiveTextBlock("Nothing found for your search")
+                    {
+                        Size = AdaptiveTextSize.Medium,
+                        Color = AdaptiveTextColor.Warning,
+                    }
+                }
+            };
+            return new ActivityCommandResponse(
+                MessageFactory.Attachment(new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = card,
+                })
+            );
+        }
 
         var attachments = adaptiveCards.Results
             .Select(adaptiveCardJson => AdaptiveCard.FromJson(adaptiveCardJson).Card)

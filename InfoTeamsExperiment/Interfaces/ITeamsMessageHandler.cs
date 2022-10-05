@@ -12,4 +12,5 @@ public interface ITeamsMessageHandler
 public enum MessageType
 {
     SelectForm,
+    SubmitForm,
 }

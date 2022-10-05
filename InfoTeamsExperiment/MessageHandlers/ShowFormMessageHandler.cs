@@ -25,7 +25,7 @@ public class ShowFormMessageHandler : ITeamsMessageHandler
         var form_id = messageData["form_id"]?.ToString();
         
         var client = this.clientFactory.CreateClient();
-        var path = "https://localhost:7072/forms/" + form_id;
+        var path = "https://localhost:7072/form/" + form_id;
         var response = await client.GetAsync(path, cancellation);
         
         var json = await response.Content.ReadAsStringAsync(cancellation);
@@ -39,6 +39,20 @@ public class ShowFormMessageHandler : ITeamsMessageHandler
             this.logger.LogWarning($"Warning {(AdaptiveWarning.WarningStatusCode) warning.Code}" +
                 $"received when parsing Adaptive Card {warning.Message}");
         }
+
+        parsedCard.Card.Actions.Add(new AdaptiveSubmitAction
+        {
+            Title = "Submit",
+            DataJson = JsonConvert.SerializeObject(new
+            {
+                type = MessageType.SubmitForm.ToString(),
+                value = new
+                {
+                    // To Do, figure out how to pass the filled-in values
+                    form_id = parsedCard.Card.Id,
+                }
+            }),
+        });
 
         var attachment = MessageFactory.Attachment(new Attachment
         {

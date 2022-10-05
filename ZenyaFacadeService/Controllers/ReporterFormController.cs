@@ -30,7 +30,9 @@ namespace ZenyaFacadeService.Controllers
             var json = await response.Content.ReadAsStringAsync();
             var form_data = JsonConvert.DeserializeObject<List<FormDTO>>(json);
 
-            return form_data.Where(f => f.title.Contains(search) || f.description.Contains(search));
+            var search_lower = search.ToLowerInvariant();
+            return form_data.Where(f => f.title.ToLowerInvariant().Contains(search_lower) ||
+                                        f.description.ToLowerInvariant().Contains(search_lower));
         }
 
         [HttpGet]

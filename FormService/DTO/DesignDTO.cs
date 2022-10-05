@@ -34,4 +34,10 @@ public class Field
     public bool? only_leaves { get; set; }
     public string initial_state { get; set; }
     public bool? hide_on_new_report { get; set; }
+
+    // Only present for numeric fields
+    public int? min_numeric_value { get; set; }
+    public int? max_numeric_value { get; set; }
+
+
 }

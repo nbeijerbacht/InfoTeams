@@ -32,7 +32,7 @@ public class FormController : ControllerBase
 
         var adaptiveCards = formData.Select(f => new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
         {
-            Id = f.form_id?.ToString(),
+            Id = f.form_id.ToString(),
             Body =
             {
                 new AdaptiveTextBlock
