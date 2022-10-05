@@ -25,13 +25,4 @@
       <ExcludeAssets>contentFiles</ExcludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Properties\launchSettings - Copy.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
