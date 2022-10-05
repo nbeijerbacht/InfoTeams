@@ -4,6 +4,8 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.TeamsFx.Conversation;
 using Microsoft.Bot.Builder;
+using ZenyaBot.Interfaces;
+using ZenyaBot.MessageHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,24 +25,14 @@ builder.Services.AddSingleton<BotFrameworkAuthentication, ConfigurationBotFramew
 // Note: some classes expect a BotAdapter and some expect a BotFrameworkHttpAdapter, so
 // register the same adapter instance for both types.
 builder.Services.AddSingleton<CloudAdapter, AdapterWithErrorHandler>();
-builder.Services.AddSingleton<IBotFrameworkHttpAdapter>(sp => sp.GetService<CloudAdapter>());
-builder.Services.AddSingleton<BotAdapter>(sp => sp.GetService<CloudAdapter>());
+builder.Services.AddSingleton<IBotFrameworkHttpAdapter>(sp => sp.GetService<CloudAdapter>()!);
+//builder.Services.AddSingleton<BotAdapter>(sp => sp.GetService<CloudAdapter>());
 
 // Create command handlers and the Conversation with command-response feature enabled.
-builder.Services.AddSingleton<ShowFormCommandsHandler>();
-builder.Services.AddSingleton(sp =>
-{
-    var options = new ConversationOptions()
-    {
-        Adapter = sp.GetService<CloudAdapter>(),
-        Command = new CommandOptions()
-        {
-            Commands = new List<ITeamsCommandHandler> { sp.GetService<ShowFormCommandsHandler>() }
-        }
-    };
+builder.Services.AddSingleton<ITeamsCommandHandler, SearchFormCommandsHandler>();
 
-    return new ConversationBot(options);
-});
+// Create message handlers to handle actions from Adaptive Cards.
+builder.Services.AddSingleton<ITeamsMessageHandler, ShowFormMessageHandler>();
 
 // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
 builder.Services.AddTransient<IBot, TeamsBot>();

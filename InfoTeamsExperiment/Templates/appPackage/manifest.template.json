@@ -42,8 +42,8 @@
                     ],
                     "commands": [
                         {
-                            "title": "form",
-                            "description": "Choose a form to fill in"
+                            "title": "search",
+                            "description": "Search for a form by name and description"
                         }
                     ]
                 }

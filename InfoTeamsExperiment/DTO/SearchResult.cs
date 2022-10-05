@@ -1,10 +1,6 @@
-﻿using AdaptiveCards;
-using Newtonsoft.Json.Linq;
+﻿namespace ZenyaBot.DTO;
 
-namespace ZenyaBot.DTO
+public class SearchResultDTO
 {
-    public class SearchResult
-    {
-        public List<string> Results { get; set; } = new List<string>();
-    }
+    public List<string> Results { get; set; } = new List<string>();
 }
