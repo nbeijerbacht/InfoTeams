@@ -1,4 +1,6 @@
 using FormService.Logic;
+using FormService.Logic.Field_Handlers;
+using FormService.Logic.Field_Type;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,11 @@ builder.Services.AddSingleton<IElementRenderer, IgnoreRenderer>();
 builder.Services.AddSingleton<IElementRenderer, DateFieldRenderer>();
 builder.Services.AddSingleton<IElementRenderer, NumericFieldRenderer>();
 builder.Services.AddSingleton<IElementRenderer, ListFieldRenderer>();
+builder.Services.AddSingleton<IElementRenderer, SubjectTreeFieldRenderer>();
+
+builder.Services.AddSingleton<IFieldHandler, TextHandler>();
+builder.Services.AddSingleton<IFieldHandler, NumericHandler>();
+builder.Services.AddSingleton<IFieldHandler, DateHandler>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();

@@ -11,15 +11,25 @@ public class NumericFieldRenderer : IElementRenderer
     {
         var number = new AdaptiveNumberInput() 
         { 
-            Id = e.element_id.ToString(),
+            Id = e.field.field_id.ToString(),
             Label = e.text,
+            ErrorMessage = "This field must be a number ",
         };
 
-        if (e.field.min_numeric_value != null)
-            number.Min = (double) e.field.min_numeric_value;
+        var (min, max) = (e.field.min_numeric_value, e.field.max_numeric_value);
+        if (min != null)
+        {
+            number.Min = min.Value;
+            number.ErrorMessage += $"bigger than {min} ";
+        }
+
+        if (max != null)
+        {
+            number.Max = max.Value;
+            number.ErrorMessage += $"and smaller than {max} ";
+        }
 
         if (e.field.max_numeric_value != null)
-            number.Max = (double)e.field.max_numeric_value;
 
         yield return number;
     }

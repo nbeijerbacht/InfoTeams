@@ -73,14 +73,13 @@ public class TeamsBot : ActivityHandler
             var messageType = Enum.Parse<MessageType>(json["type"].ToString());
 
             var handler = this.messageHandlers.FirstOrDefault(h => h.CanHandle(messageType));
-            var data = JsonConvert.DeserializeObject<IDictionary<string, object>>(json["value"].ToString());
             if (handler is null)
             {
                 await turnContext.SendActivityAsync("Could not handle message: " + value.ToString(), cancellationToken: cancellationToken);
             }
             else
             {
-                await handler.Handle(turnContext, data, cancellationToken);
+                await handler.Handle(turnContext, json, cancellationToken);
             }
         }
     }
