@@ -13,12 +13,18 @@ public class FormController : ControllerBase
     private readonly ILogger<FormController> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IAdaptiveCardRenderer rederer;
+    private readonly IEnumerable<IFieldHandler> fieldHandlers;
 
-    public FormController(ILogger<FormController> logger, IHttpClientFactory httpClientFactory, IAdaptiveCardRenderer rederer)
+    public FormController(
+        ILogger<FormController> logger,
+        IHttpClientFactory httpClientFactory,
+        IAdaptiveCardRenderer rederer,
+        IEnumerable<IFieldHandler> fieldHandlers)
     {
         _logger = logger;
         _httpClientFactory = httpClientFactory;
         this.rederer = rederer;
+        this.fieldHandlers = fieldHandlers;
     }
 
     [HttpGet]
@@ -52,7 +58,6 @@ public class FormController : ControllerBase
         {
             Results = adaptiveCards,
         };
-
     }
 
     [HttpGet]
@@ -67,13 +72,45 @@ public class FormController : ControllerBase
 
         var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
 
-        var result = rederer.Render(formData).ToJson();
-
-        _logger.LogInformation(result);
+        var result = rederer.Render(formData);
 
         return new FormResultDTO
         {
-            Result = result,
+            Result = result.ToJson(),
         };
+    }
+
+    [HttpPost]
+    public async Task<FormOutputDTO> SubmitForm(FormInput formInput)
+    {
+        var client = this._httpClientFactory.CreateClient();
+
+        var formResponse = await client.GetAsync($"https://localhost:7071/reporterForm/{formInput.form_id}");
+        var json = await formResponse.Content.ReadAsStringAsync();
+        var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
+
+        var formOut = new FormOutputDTO
+        {
+            form_id = formInput.form_id,
+            fields = new List<FieldOutput>(),
+        };
+
+        foreach (var inputField in formInput.fields)
+        {
+            var fieldDefinition = formData.design.elements
+                .Select(element => element.field)
+                .First(field => field?.field_id.ToString() == inputField.field_id);
+
+            var output = this.fieldHandlers
+                .First(h => h.CanHandle(fieldDefinition.type))
+                .Handle(inputField);
+
+            formOut.fields.Add(output);
+        }
+
+        var postResponse = await client.PostAsJsonAsync($"https://localhost:7071/reporterForm/", formOut);
+        var kljson = await postResponse.Content.ReadAsStringAsync();
+
+        return formOut;
     }
 }

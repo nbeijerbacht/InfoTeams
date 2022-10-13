@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using ZenyaFacadeService.DTO;
 
 namespace ZenyaFacadeService.Controllers
@@ -22,7 +24,7 @@ namespace ZenyaFacadeService.Controllers
         [HttpGet]
         public async Task<IEnumerable<FormDTO>> SearchThroughForms([FromQuery(Name = "search")] string search)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("ZenyaClient");
             var path = "https://msteams.zenya.work/api/cases/reporter_forms";
 
             var response = await client.GetAsync(path);
@@ -37,17 +39,28 @@ namespace ZenyaFacadeService.Controllers
 
         [HttpGet]
         [Route("{form_id:int}")]
-        public async Task<FormDTO> FormById(int form_id)
+        public async Task<string> FormById(int form_id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("ZenyaClient");
             var path = $"https://msteams.zenya.work/api/cases/reporter_forms/{form_id}?include_design=true";
 
             var response = await client.GetAsync(path);
 
             var json = await response.Content.ReadAsStringAsync();
-            var form_data = JsonConvert.DeserializeObject<FormDTO>(json);
 
-            return form_data;
+            return json;
+        }
+
+        [HttpPost]
+        public async Task<string> SubmitForm([FromBody] JsonElement body)
+        {
+            var client = _httpClientFactory.CreateClient("ZenyaClient");
+            var path = $"https://msteams.zenya.work/api/cases";
+
+            var response = await client.PostAsJsonAsync(path, body);
+            var resp = await response.Content.ReadAsStringAsync();
+
+            return resp;
         }
     }
 }

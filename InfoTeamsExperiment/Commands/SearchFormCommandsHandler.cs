@@ -73,10 +73,7 @@ public class SearchFormCommandsHandler : ITeamsCommandHandler
                     Title = "Fill in",
                     DataJson = JsonConvert.SerializeObject(new {
                         type = MessageType.SelectForm.ToString(),
-                        value = new
-                        {
-                            form_id = card.Id,
-                        }
+                        form_id = card.Id,
                     }),
                 });
                 return card;

@@ -9,10 +9,10 @@ public class TextFieldRenderer : IElementRenderer
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)
     {
-        yield return new AdaptiveTextBlock
+        yield return new AdaptiveTextInput() 
         {
-            Text = e.text
+            Id = e.field.field_id.ToString(),
+            Label = e.text,
         };
-        yield return new AdaptiveTextInput() { Id = e.element_id.ToString() };
     }
 }

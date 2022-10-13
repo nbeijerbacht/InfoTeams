@@ -1,4 +1,4 @@
-﻿using static FormService.DTO.DesignDTO;
+﻿using Newtonsoft.Json.Linq;
 
 namespace FormService.DTO;
 
@@ -27,7 +27,7 @@ public class Field
     public int field_id { get; set; }
     public bool required { get; set; }
     public bool read_only { get; set; }
-    public object default_value { get; set; }
+    public JToken default_value { get; set; }
     public string description { get; set; }
     public int text_lines { get; set; }
     public string name { get; set; }

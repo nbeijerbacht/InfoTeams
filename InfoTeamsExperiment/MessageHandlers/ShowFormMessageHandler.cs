@@ -1,4 +1,5 @@
 ﻿using AdaptiveCards;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Newtonsoft.Json;
@@ -30,9 +31,9 @@ public class ShowFormMessageHandler : ITeamsMessageHandler
         
         var json = await response.Content.ReadAsStringAsync(cancellation);
 
-        var cardJson = JsonConvert.DeserializeObject<FormResultDTO>(json).Result;
+        var result = JsonConvert.DeserializeObject<FormResultDTO>(json).Result;
 
-        var parsedCard = AdaptiveCard.FromJson(cardJson);
+        var parsedCard = AdaptiveCard.FromJson(result);
 
         foreach (var warning in parsedCard.Warnings)
         {
@@ -40,24 +41,22 @@ public class ShowFormMessageHandler : ITeamsMessageHandler
                 $"received when parsing Adaptive Card {warning.Message}");
         }
 
-        parsedCard.Card.Actions.Add(new AdaptiveSubmitAction
+        var card = parsedCard.Card;
+
+        card.Actions.Add(new AdaptiveSubmitAction
         {
             Title = "Submit",
             DataJson = JsonConvert.SerializeObject(new
             {
                 type = MessageType.SubmitForm.ToString(),
-                value = new
-                {
-                    // To Do, figure out how to pass the filled-in values
-                    form_id = parsedCard.Card.Id,
-                }
+                form_id,
             }),
         });
 
         var attachment = MessageFactory.Attachment(new Attachment
         {
             ContentType = AdaptiveCard.ContentType,
-            Content = parsedCard.Card,
+            Content = card,
         });
 
         await turnContext.SendActivityAsync(attachment, cancellation);

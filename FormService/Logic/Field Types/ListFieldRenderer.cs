@@ -11,7 +11,7 @@ public class ListFieldRenderer : IElementRenderer
     {
             yield return new AdaptiveChoiceSetInput
         {
-            Id = e.element_id.ToString(),
+            Id = e.field.field_id.ToString(),
             Label = e.text,
             Choices = e.field.list_items?.Select(item =>
                 new AdaptiveChoice

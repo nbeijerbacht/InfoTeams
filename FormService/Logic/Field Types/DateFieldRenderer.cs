@@ -11,7 +11,7 @@ public class DateFieldRenderer : IElementRenderer
     {
         yield return new AdaptiveDateInput() 
         { 
-            Id = e.element_id.ToString(),
+            Id = e.field.field_id.ToString(),
             Label = e.text,
         };
     }
