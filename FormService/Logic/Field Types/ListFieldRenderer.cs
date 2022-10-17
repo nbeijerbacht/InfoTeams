@@ -5,7 +5,7 @@ namespace FormService.Logic;
 
 public class ListFieldRenderer : IElementRenderer
 {
-    public bool CanHandle(Element e) => e is { element_type: "field", field.type: "list" };
+    public bool CanHandle(Element e) => e is { element_type: "field", field.type: "list" or "numeric_list" };
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)
     {

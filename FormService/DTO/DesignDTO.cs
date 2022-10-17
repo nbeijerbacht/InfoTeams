@@ -47,4 +47,5 @@ public class ListItem
 {
     public int list_item_id { get; set; }
     public string name { get; set; }
+    public int numeric_value { get; set; }
 }
