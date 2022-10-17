@@ -32,8 +32,8 @@ builder.Services.AddSingleton<IBotFrameworkHttpAdapter>(sp => sp.GetService<Clou
 builder.Services.AddSingleton<ITeamsCommandHandler, SearchFormCommandsHandler>();
 
 // Create message handlers to handle actions from Adaptive Cards.
-builder.Services.AddSingleton<ITeamsMessageHandler, ShowFormMessageHandler>();
-builder.Services.AddSingleton<ITeamsMessageHandler, SubmitFormMessageHandler>();
+builder.Services.AddSingleton<ITeamsActionHandler, ShowFormActionHandler>();
+builder.Services.AddSingleton<ITeamsActionHandler, SubmitFormActionHandler>();
 
 // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
 builder.Services.AddTransient<IBot, TeamsBot>();

@@ -12,7 +12,7 @@ public class FormController : ControllerBase
 {
     private readonly ILogger<FormController> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IAdaptiveCardRenderer rederer;
+    private readonly IAdaptiveCardRenderer renderer;
     private readonly IEnumerable<IFieldHandler> fieldHandlers;
 
     public FormController(
@@ -23,7 +23,7 @@ public class FormController : ControllerBase
     {
         _logger = logger;
         _httpClientFactory = httpClientFactory;
-        this.rederer = rederer;
+        this.renderer = rederer;
         this.fieldHandlers = fieldHandlers;
     }
 
@@ -72,7 +72,7 @@ public class FormController : ControllerBase
 
         var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
 
-        var result = rederer.Render(formData);
+        var result = renderer.Render(formData);
 
         return new FormResultDTO
         {
