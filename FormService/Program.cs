@@ -16,6 +16,7 @@ builder.Services.AddSingleton<IElementRenderer, NumericFieldRenderer>();
 builder.Services.AddSingleton<IElementRenderer, ListFieldRenderer>();
 builder.Services.AddSingleton<IElementRenderer, SubjectTreeFieldRenderer>();
 builder.Services.AddSingleton<IElementRenderer, CheckboxFieldRenderer>();
+builder.Services.AddSingleton<IElementRenderer, TimeFieldRenderer>();
 
 builder.Services.AddSingleton<IFieldHandler, TextHandler>();
 builder.Services.AddSingleton<IFieldHandler, NumericHandler>();

@@ -81,7 +81,7 @@ public class FormController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<FormOutputDTO> SubmitForm(FormInput formInput)
+    public async Task SubmitForm(FormInput formInput)
     {
         var client = this._httpClientFactory.CreateClient();
 
@@ -109,8 +109,11 @@ public class FormController : ControllerBase
         }
 
         var postResponse = await client.PostAsJsonAsync($"https://localhost:7071/reporterForm/", formOut);
-        var kljson = await postResponse.Content.ReadAsStringAsync();
 
-        return formOut;
+        Response.StatusCode = (int)postResponse.StatusCode;
+        Response.ContentType = "application/json; charset=utf-8";
+
+        await Response.WriteAsync(await postResponse.Content.ReadAsStringAsync());
+        await Response.CompleteAsync();
     }
 }

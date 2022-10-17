@@ -52,15 +52,18 @@ namespace ZenyaFacadeService.Controllers
         }
 
         [HttpPost]
-        public async Task<string> SubmitForm([FromBody] JsonElement body)
+        public async Task SubmitForm([FromBody] JsonElement body)
         {
             var client = _httpClientFactory.CreateClient("ZenyaClient");
             var path = $"https://msteams.zenya.work/api/cases";
 
             var response = await client.PostAsJsonAsync(path, body);
-            var resp = await response.Content.ReadAsStringAsync();
 
-            return resp;
+            Response.StatusCode = (int) response.StatusCode;
+            Response.ContentType = "application/json; charset=utf-8";
+
+            await Response.WriteAsync(await response.Content.ReadAsStringAsync());
+            await Response.CompleteAsync();
         }
     }
 }
