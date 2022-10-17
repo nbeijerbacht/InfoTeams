@@ -10,12 +10,12 @@ namespace FormService.Logic.Field_Type
 
         public IEnumerable<AdaptiveElement> RenderElements(Element e)
         {
-            var @default = e.field.default_value["subject_id"];
+            var @default = e.field.default_value?["subject_id"]?.ToString();
             yield return new AdaptiveTextInput()
             {
                 Id = e.field.field_id.ToString(),
                 Label = e.text,
-                Value = @default.ToString(),
+                Value = @default,
                 IsVisible = false,
             };
         }
