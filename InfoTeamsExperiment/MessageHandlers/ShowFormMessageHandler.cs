@@ -8,19 +8,22 @@ using ZenyaBot.Interfaces;
 
 namespace ZenyaBot.MessageHandlers;
 
-public class ShowFormMessageHandler : ITeamsMessageHandler
+/// <inheritdoc />
+public class ShowFormActionHandler : ITeamsActionHandler
 {
-    private readonly ILogger<ShowFormMessageHandler> logger;
+    private readonly ILogger<ShowFormActionHandler> logger;
     private readonly IHttpClientFactory clientFactory;
 
-    public ShowFormMessageHandler(ILogger<ShowFormMessageHandler> logger, IHttpClientFactory clientFactory)
+    public ShowFormActionHandler(ILogger<ShowFormActionHandler> logger, IHttpClientFactory clientFactory)
     {
         this.logger = logger;
         this.clientFactory = clientFactory;
     }
 
-    public bool CanHandle(MessageType type) => type == MessageType.SelectForm;
+    /// <inheritdoc />
+    public bool CanHandle(CustomActionType type) => type == CustomActionType.SelectForm;
 
+    /// <inheritdoc />
     public async Task Handle(ITurnContext turnContext, IDictionary<string, object> messageData, CancellationToken cancellation = default)
     {
         var form_id = messageData["form_id"]?.ToString();
@@ -48,7 +51,7 @@ public class ShowFormMessageHandler : ITeamsMessageHandler
             Title = "Submit",
             DataJson = JsonConvert.SerializeObject(new
             {
-                type = MessageType.SubmitForm.ToString(),
+                type = CustomActionType.SubmitForm.ToString(),
                 form_id,
             }),
         });

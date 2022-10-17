@@ -1,26 +1,25 @@
-﻿using AdaptiveCards;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Schema;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Microsoft.Bot.Builder;
 using ZenyaBot.DTO;
 using ZenyaBot.Interfaces;
 
 namespace ZenyaBot.MessageHandlers;
 
-public class SubmitFormMessageHandler : ITeamsMessageHandler
+/// <inheritdoc />
+public class SubmitFormActionHandler : ITeamsActionHandler
 {
-    private readonly ILogger<SubmitFormMessageHandler> logger;
+    private readonly ILogger<SubmitFormActionHandler> logger;
     private readonly IHttpClientFactory clientFactory;
 
-    public SubmitFormMessageHandler(ILogger<SubmitFormMessageHandler> logger, IHttpClientFactory clientFactory)
+    public SubmitFormActionHandler(ILogger<SubmitFormActionHandler> logger, IHttpClientFactory clientFactory)
     {
         this.logger = logger;
         this.clientFactory = clientFactory;
     }
 
-    public bool CanHandle(MessageType type) => type == MessageType.SubmitForm;
+    /// <inheritdoc />
+    public bool CanHandle(CustomActionType type) => type == CustomActionType.SubmitForm;
 
+    /// <inheritdoc />
     public async Task Handle(ITurnContext turnContext, IDictionary<string, object> messageData, CancellationToken cancellation = default)
     {
         var form_id = messageData["form_id"].ToString();

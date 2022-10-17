@@ -14,12 +14,12 @@ namespace ZenyaBot;
 public class TeamsBot : ActivityHandler
 {
     private readonly List<ITeamsCommandHandler> commands;
-    private readonly IEnumerable<ITeamsMessageHandler> messageHandlers;
+    private readonly IEnumerable<ITeamsActionHandler> messageHandlers;
     private readonly ILogger<TeamsBot> logger;
 
     public TeamsBot(
         IEnumerable<ITeamsCommandHandler> commands,
-        IEnumerable<ITeamsMessageHandler> messageHandlers,
+        IEnumerable<ITeamsActionHandler> messageHandlers,
         ILogger<TeamsBot> logger)
     {
         this.commands = commands.ToList();
@@ -70,7 +70,7 @@ public class TeamsBot : ActivityHandler
         {
             var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(value.ToString()!);
 
-            var messageType = Enum.Parse<MessageType>(json["type"].ToString());
+            var messageType = Enum.Parse<CustomActionType>(json["type"].ToString());
 
             var handler = this.messageHandlers.FirstOrDefault(h => h.CanHandle(messageType));
             if (handler is null)
