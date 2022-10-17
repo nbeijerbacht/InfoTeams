@@ -48,6 +48,7 @@ namespace FormService.DTO
     {
         public int list_item_id { get; set; }
         public string name { get; set; }
+        public double numeric_value { get; set; }  
     }
 
 }
