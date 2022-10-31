@@ -1,5 +1,6 @@
 ﻿using AdaptiveCards;
 using FormService.DTO;
+using Newtonsoft.Json.Linq;
 
 namespace FormService.Logic;
 
@@ -9,10 +10,11 @@ public class ListFieldRenderer : IElementRenderer
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)
     {
-            yield return new AdaptiveChoiceSetInput
+        yield return new AdaptiveChoiceSetInput
         {
             Id = e.field.field_id.ToString(),
             Label = e.text,
+            Value = e.field.default_value?.ToString(),
             Choices = e.field.list_items?.Select(item =>
                 new AdaptiveChoice
                 {
