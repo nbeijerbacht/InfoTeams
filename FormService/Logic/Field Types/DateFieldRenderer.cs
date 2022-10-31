@@ -9,10 +9,12 @@ public class DateFieldRenderer : IElementRenderer
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)
     {
+        var default_value = e.field.default_value?.ToString();
         yield return new AdaptiveDateInput() 
         { 
             Id = e.field.field_id.ToString(),
             Label = e.text,
+            Value =  default_value == "current_date" ? DateTime.Now.ToString("yyyy-MM-dd") : "" ,
         };
     }
 }
