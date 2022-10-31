@@ -35,11 +35,11 @@ namespace ZenyaFacadeService.Controllers
 
         [HttpGet]
         [Route("{form_id:int}")]
-        public async Task<string> FormById(int form_id)
+        public async Task<ActionResult> FormById(int form_id)
         {
             var json = await _client.GetFormById(form_id);
-            if (json is not null) return await _client.GetFormById(form_id);
-            else return "Not found";
+            if (json is null) return this.NotFound();
+            else return this.Ok(json);
         }
 
         [HttpPost]
