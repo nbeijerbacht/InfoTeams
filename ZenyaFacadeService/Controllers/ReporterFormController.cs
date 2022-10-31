@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using ZenyaFacadeService.DTO;
+using ZenyaFacadeService.HttpClient;
 
 namespace ZenyaFacadeService.Controllers
 {
@@ -13,23 +14,18 @@ namespace ZenyaFacadeService.Controllers
     public class ReporterFormController : ControllerBase
     {
         private readonly ILogger<ReporterFormController> _logger;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IZenyaHttpClient _client;
 
-        public ReporterFormController(ILogger<ReporterFormController> logger, IHttpClientFactory httpClientFactory)
+        public ReporterFormController(ILogger<ReporterFormController> logger, IZenyaHttpClient client)
         {
             _logger = logger;
-            _httpClientFactory = httpClientFactory;
+            _client = client;
         }
 
         [HttpGet]
         public async Task<IEnumerable<FormDTO>> SearchThroughForms([FromQuery(Name = "search")] string search)
         {
-            var client = _httpClientFactory.CreateClient("ZenyaClient");
-            var path = "https://msteams.zenya.work/api/cases/reporter_forms";
-
-            var response = await client.GetAsync(path);
-
-            var json = await response.Content.ReadAsStringAsync();
+            var json = await _client.GetAllForms();
             var form_data = JsonConvert.DeserializeObject<List<FormDTO>>(json);
 
             var search_lower = search.ToLowerInvariant();
@@ -41,23 +37,15 @@ namespace ZenyaFacadeService.Controllers
         [Route("{form_id:int}")]
         public async Task<string> FormById(int form_id)
         {
-            var client = _httpClientFactory.CreateClient("ZenyaClient");
-            var path = $"https://msteams.zenya.work/api/cases/reporter_forms/{form_id}?include_design=true";
-
-            var response = await client.GetAsync(path);
-
-            var json = await response.Content.ReadAsStringAsync();
-
-            return json;
+            var json = await _client.GetFormById(form_id);
+            if (json is not null) return await _client.GetFormById(form_id);
+            else return "Not found";
         }
 
         [HttpPost]
         public async Task SubmitForm([FromBody] JsonElement body)
         {
-            var client = _httpClientFactory.CreateClient("ZenyaClient");
-            var path = $"https://msteams.zenya.work/api/cases";
-
-            var response = await client.PostAsJsonAsync(path, body);
+            var response = await _client.PostForm(body);
 
             Response.StatusCode = (int) response.StatusCode;
             Response.ContentType = "application/json; charset=utf-8";

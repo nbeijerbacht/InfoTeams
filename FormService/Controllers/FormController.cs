@@ -70,14 +70,18 @@ public class FormController : ControllerBase
 
         var json = await response.Content.ReadAsStringAsync();
 
-        var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
-
-        var result = renderer.Render(formData);
-
-        return new FormResultDTO
+        if (json is not "Not found")
         {
-            Result = result.ToJson(),
-        };
+            var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
+
+            var result = renderer.Render(formData);
+
+            return new FormResultDTO
+            {
+                Result = result.ToJson(),
+            };
+        }
+        else return new FormResultDTO { Result = "Oops something went wrong" };
     }
 
     [HttpPost]
