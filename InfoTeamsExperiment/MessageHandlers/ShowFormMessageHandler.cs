@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Newtonsoft.Json;
+using System.Net;
 using ZenyaBot.DTO;
 using ZenyaBot.Interfaces;
 
@@ -33,6 +34,11 @@ public class ShowFormActionHandler : ITeamsActionHandler
         var response = await client.GetAsync(path, cancellation);
         
         var json = await response.Content.ReadAsStringAsync(cancellation);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            await turnContext.SendActivityAsync("No form was found please try again.");
+        }
 
         var result = JsonConvert.DeserializeObject<FormResultDTO>(json).Result;
 

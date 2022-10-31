@@ -22,8 +22,8 @@ namespace ZenyaFacadeTest
             using var client = application.CreateClient();
             var response = await client.GetAsync("reporterForm?search=fontys");
             var json = await response.Content.ReadAsStringAsync();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(Regex.Replace(MockData.searchResult, @"\s+", ""), Regex.Replace(json, @"\s+", ""));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            Regex.Replace(json, @"\s+", "").Should().Be(Regex.Replace(MockData.searchResult, @"\s+", ""));
         }
 
         [Fact]
@@ -33,8 +33,8 @@ namespace ZenyaFacadeTest
             using var client = application.CreateClient();
             var response = await client.GetAsync("reporterForm?search=nothing");
             var json = await response.Content.ReadAsStringAsync();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal("[]", json);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            json.Should().Be("[]");
         }
 
         [Fact]
@@ -44,8 +44,8 @@ namespace ZenyaFacadeTest
             using var client = application.CreateClient();
             var response = await client.GetAsync("reporterForm/2216");
             var json = await response.Content.ReadAsStringAsync();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(MockData.mockFormById, json);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            json.Should().Be(MockData.mockFormById);
         }
 
         [Fact]
@@ -55,8 +55,7 @@ namespace ZenyaFacadeTest
             using var client = application.CreateClient();
             var response = await client.GetAsync("reporterForm/9999");
             var json = await response.Content.ReadAsStringAsync();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal("Not found", json);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -66,7 +65,7 @@ namespace ZenyaFacadeTest
             using var client = application.CreateClient();
             var response = await client.PostAsJsonAsync($"reporterForm/", "");
             var json = await response.Content.ReadAsStringAsync();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
     }
 }

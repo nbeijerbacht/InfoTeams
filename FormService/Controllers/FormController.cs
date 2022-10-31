@@ -2,7 +2,9 @@ using AdaptiveCards;
 using FormService.DTO;
 using FormService.Logic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace FormService.Controllers;
 
@@ -62,26 +64,24 @@ public class FormController : ControllerBase
 
     [HttpGet]
     [Route("{form_id:int}")]
-    public async Task<FormResultDTO> GetFormById(int form_id)
+    public async Task<ActionResult<FormResultDTO>> GetFormById(int form_id)
     {
         var client = this._httpClientFactory.CreateClient();
 
         var response = await client.GetAsync($"https://localhost:7071/reporterForm/{form_id}");
 
+        if (response.StatusCode == HttpStatusCode.NotFound) return this.NotFound();
+
         var json = await response.Content.ReadAsStringAsync();
 
-        if (json is not "Not found")
+        var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
+
+        var result = renderer.Render(formData);
+
+        return this.Ok(new FormResultDTO
         {
-            var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
-
-            var result = renderer.Render(formData);
-
-            return new FormResultDTO
-            {
-                Result = result.ToJson(),
-            };
-        }
-        else return new FormResultDTO { Result = "Oops something went wrong" };
+            Result = result.ToJson(),
+        });
     }
 
     [HttpPost]
