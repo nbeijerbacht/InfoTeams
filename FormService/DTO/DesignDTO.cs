@@ -4,7 +4,7 @@ namespace FormService.DTO;
 
 public class DesignDTO
 {
-    public List<Element> elements { get; set; }
+    public List<Element> elements { get; set; } = new List<Element>();
     public List<object> conditions { get; set; }
 }
 
