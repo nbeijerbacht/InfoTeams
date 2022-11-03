@@ -4,7 +4,7 @@
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "launchUrl": "https://teams.microsoft.com/l/app/d7e4862a-3699-4bb7-8a31-53e780e18a5f?installAppPackage=true&webjoin=true&appTenantId=a4902f43-7b00-4b65-9907-7b084db98898&login_hint=mihail@vfjcd.onmicrosoft.com",
+      "launchUrl": "https://teams.microsoft.com/l/app/f7217a28-20d3-4254-b59d-053914a330df?installAppPackage=true&webjoin=true&appTenantId=a4902f43-7b00-4b65-9907-7b084db98898&login_hint=n.beijerbacht@vfjcd.onmicrosoft.com",
       "applicationUrl": "http://localhost:5130",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -22,6 +22,7 @@ internal class Program
         builder.Services.AddSingleton<IElementRenderer, CheckboxFieldRenderer>();
         builder.Services.AddSingleton<IElementRenderer, TimeFieldRenderer>();
 
+        builder.Services.AddSingleton<IFieldHandler, BooleanHandler>();
         builder.Services.AddSingleton<IFieldHandler, TextHandler>();
         builder.Services.AddSingleton<IFieldHandler, NumericHandler>();
         builder.Services.AddSingleton<IFieldHandler, DateHandler>();
