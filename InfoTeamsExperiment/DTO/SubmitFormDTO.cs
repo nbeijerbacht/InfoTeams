@@ -1,15 +1,14 @@
-﻿namespace ZenyaBot.DTO
+﻿namespace ZenyaBot.DTO;
+
+public class SubmitFormDTO
 {
-    public class SubmitFormDTO
-    {
-        public string form_id { get; set; }
+    public string form_id { get; set; }
 
-        public List<FieldDTO> fields { get; set; }
-    }
+    public List<FieldDTO> fields { get; set; }
+}
 
-    public class FieldDTO
-    {
-        public string field_id { get; set; }
-        public object value { get; set; }
-    }
+public class FieldDTO
+{
+    public string field_id { get; set; }
+    public object value { get; set; }
 }
