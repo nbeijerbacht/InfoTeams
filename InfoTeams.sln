@@ -12,6 +12,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsTest", "FormsTest\FormsTest.csproj", "{2C75C9FF-D0E5-4E2D-9C50-A8817933C02B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZenyaFacadeTest", "ZenyaFacadeTest\ZenyaFacadeTest.csproj", "{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndToEndTest", "EndToEndTest\EndToEndTest.csproj", "{FD338897-549D-40D9-BFE5-37A273102C01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +42,10 @@ Global
 		{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD338897-549D-40D9-BFE5-37A273102C01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD338897-549D-40D9-BFE5-37A273102C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD338897-549D-40D9-BFE5-37A273102C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD338897-549D-40D9-BFE5-37A273102C01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
