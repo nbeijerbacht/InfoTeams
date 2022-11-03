@@ -1,43 +1,42 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-namespace ZenyaFacadeService.HttpClient
+namespace ZenyaFacadeService.HttpClient;
+
+public class ZenyaHttpClient : IZenyaHttpClient
 {
-    public class ZenyaHttpClient : IZenyaHttpClient
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public ZenyaHttpClient(IHttpClientFactory httpClientFactory)
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        _httpClientFactory = httpClientFactory;
+    }
 
-        public ZenyaHttpClient(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
+    public async Task<string> GetAllForms()
+    {
+        var client = _httpClientFactory.CreateClient("ZenyaClient");
+        var path = "https://msteams.zenya.work/api/cases/reporter_forms";
 
-        public async Task<string> GetAllForms()
-        {
-            var client = _httpClientFactory.CreateClient("ZenyaClient");
-            var path = "https://msteams.zenya.work/api/cases/reporter_forms";
+        var response = await client.GetAsync(path);
 
-            var response = await client.GetAsync(path);
+        return await response.Content.ReadAsStringAsync();
+    }
 
-            return await response.Content.ReadAsStringAsync();
-        }
+    public async Task<string> GetFormById(int id)
+    {
+        var client = _httpClientFactory.CreateClient("ZenyaClient");
+        var path = $"https://msteams.zenya.work/api/cases/reporter_forms/{id}?include_design=true";
 
-        public async Task<string> GetFormById(int id)
-        {
-            var client = _httpClientFactory.CreateClient("ZenyaClient");
-            var path = $"https://msteams.zenya.work/api/cases/reporter_forms/{id}?include_design=true";
+        var response = await client.GetAsync(path);
 
-            var response = await client.GetAsync(path);
+        return await response.Content.ReadAsStringAsync();
+    }
 
-            return await response.Content.ReadAsStringAsync();
-        }
+    public async Task<HttpResponseMessage> PostForm(JsonElement body)
+    {
+        var client = _httpClientFactory.CreateClient("ZenyaClient");
+        var path = $"https://msteams.zenya.work/api/cases";
 
-        public async Task<HttpResponseMessage> PostForm(JsonElement body)
-        {
-            var client = _httpClientFactory.CreateClient("ZenyaClient");
-            var path = $"https://msteams.zenya.work/api/cases";
-
-            return await client.PostAsJsonAsync(path, body);
-        }
+        return await client.PostAsJsonAsync(path, body);
     }
 }

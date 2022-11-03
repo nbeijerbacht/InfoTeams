@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZenyaFacadeTest
+namespace ZenyaFacadeTest;
+
+public static class MockData
 {
-    public static class MockData
-    {
-        public static string mockAllForms = @"[
+    public static string mockAllForms = @"[
                                         {
                                             ""type"": ""full"",
                                             ""description"": ""Something to test with"",
@@ -28,7 +28,7 @@ namespace ZenyaFacadeTest
                                             ""design"": null
                                         }
                                         ]";
-        public static string searchResult = @"[{
+    public static string searchResult = @"[{
                                         ""type"": ""full"",
                                         ""description"": ""Something to test with"",
                                         ""message_after_sending"": """",
@@ -37,7 +37,7 @@ namespace ZenyaFacadeTest
                                         ""title"": ""Miha Test Fontys"",
                                         ""design"": null
                                       }]";
-        public static string mockFormById = @"{
+    public static string mockFormById = @"{
                                         ""type"": ""full"",
                                         ""description"": ""Something to test with"",
                                         ""message_after_sending"": """",
@@ -46,5 +46,4 @@ namespace ZenyaFacadeTest
                                         ""title"": ""Miha Test Fontys"",
                                         ""design"": null
                                       }";
-    }
 }

@@ -12,21 +12,20 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using ZenyaFacadeService.HttpClient;
 
-namespace ZenyaFacadeTest
+namespace ZenyaFacadeTest;
+
+internal class ZenyaFacadeFactory : WebApplicationFactory<ZenyaFacadeService.Startup>
 {
-    internal class ZenyaFacadeFactory : WebApplicationFactory<ZenyaFacadeService.Startup>
+    public IConfiguration Configuration { get; private set; }
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        public IConfiguration Configuration { get; private set; }
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        builder.ConfigureServices(services =>
         {
-            builder.ConfigureServices(services =>
-            {
-                var clientMock = new Mock<IZenyaHttpClient>();
-                clientMock.Setup(c => c.GetAllForms()).ReturnsAsync(MockData.mockAllForms);
-                clientMock.Setup(c => c.GetFormById(2216)).ReturnsAsync(MockData.mockFormById);
-                clientMock.Setup(c => c.PostForm(It.IsAny<JsonElement>())).ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
-                services.AddTransient(s => clientMock.Object);
-            });
-        }
+            var clientMock = new Mock<IZenyaHttpClient>();
+            clientMock.Setup(c => c.GetAllForms()).ReturnsAsync(MockData.mockAllForms);
+            clientMock.Setup(c => c.GetFormById(2216)).ReturnsAsync(MockData.mockFormById);
+            clientMock.Setup(c => c.PostForm(It.IsAny<JsonElement>())).ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+            services.AddTransient(s => clientMock.Object);
+        });
     }
 }

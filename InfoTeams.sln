@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZenyaFacadeService", "Zenya
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FormService", "FormService\FormService.csproj", "{5F0ADB68-083D-4BDA-B1F8-18B8566D7919}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsTest", "FormsTest\FormsTest.csproj", "{2C75C9FF-D0E5-4E2D-9C50-A8817933C02B}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZenyaFacadeTest", "ZenyaFacadeTest\ZenyaFacadeTest.csproj", "{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}"
 EndProject
 Global
@@ -31,6 +33,10 @@ Global
 		{5F0ADB68-083D-4BDA-B1F8-18B8566D7919}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F0ADB68-083D-4BDA-B1F8-18B8566D7919}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F0ADB68-083D-4BDA-B1F8-18B8566D7919}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C75C9FF-D0E5-4E2D-9C50-A8817933C02B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C75C9FF-D0E5-4E2D-9C50-A8817933C02B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C75C9FF-D0E5-4E2D-9C50-A8817933C02B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C75C9FF-D0E5-4E2D-9C50-A8817933C02B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}.Release|Any CPU.ActiveCfg = Release|Any CPU

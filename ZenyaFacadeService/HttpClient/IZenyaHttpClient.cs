@@ -1,11 +1,10 @@
 ﻿using System.Text.Json;
 
-namespace ZenyaFacadeService.HttpClient
+namespace ZenyaFacadeService.HttpClient;
+
+public interface IZenyaHttpClient
 {
-    public interface IZenyaHttpClient
-    {
-        Task<string> GetAllForms();
-        Task<string> GetFormById(int id);
-        Task<HttpResponseMessage> PostForm(JsonElement body);
-    }
+    Task<string> GetAllForms();
+    Task<string> GetFormById(int id);
+    Task<HttpResponseMessage> PostForm(JsonElement body);
 }

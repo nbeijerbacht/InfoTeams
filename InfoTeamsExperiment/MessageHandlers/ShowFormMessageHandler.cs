@@ -38,6 +38,7 @@ public class ShowFormActionHandler : ITeamsActionHandler
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
             await turnContext.SendActivityAsync("No form was found please try again.");
+            return;
         }
 
         var result = JsonConvert.DeserializeObject<FormResultDTO>(json).Result;
