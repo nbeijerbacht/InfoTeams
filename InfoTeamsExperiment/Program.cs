@@ -6,6 +6,7 @@ using Microsoft.TeamsFx.Conversation;
 using Microsoft.Bot.Builder;
 using ZenyaBot.Interfaces;
 using ZenyaBot.MessageHandlers;
+using ZenyaBot.Logic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,11 @@ builder.Services.AddSingleton<ITeamsCommandHandler, SearchFormCommandsHandler>()
 // Create message handlers to handle actions from Adaptive Cards.
 builder.Services.AddSingleton<ITeamsActionHandler, ShowFormActionHandler>();
 builder.Services.AddSingleton<ITeamsActionHandler, SubmitFormActionHandler>();
+builder.Services.AddSingleton<ITeamsActionHandler, LookUpFieldMessageHandler>();
+
+builder.Services.AddSingleton<IFormRetriever, HttpFormRetriever>();
+builder.Services.AddSingleton<IFormFiller, FormFiller>();
+
 
 // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
 builder.Services.AddTransient<IBot, TeamsBot>();

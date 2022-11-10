@@ -15,17 +15,20 @@ public class FormController : ControllerBase
     private readonly ILogger<FormController> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IAdaptiveCardRenderer renderer;
+    private readonly ILookUpFieldInjector lookupHandler;
     private readonly IEnumerable<IFieldHandler> fieldHandlers;
 
     public FormController(
         ILogger<FormController> logger,
         IHttpClientFactory httpClientFactory,
         IAdaptiveCardRenderer rederer,
+        ILookUpFieldInjector lookupHandler,
         IEnumerable<IFieldHandler> fieldHandlers)
     {
         _logger = logger;
         _httpClientFactory = httpClientFactory;
         this.renderer = rederer;
+        this.lookupHandler = lookupHandler;
         this.fieldHandlers = fieldHandlers;
     }
 
@@ -64,7 +67,10 @@ public class FormController : ControllerBase
 
     [HttpGet]
     [Route("{form_id:int}")]
-    public async Task<ActionResult<FormResultDTO>> GetFormById(int form_id)
+    public async Task<ActionResult<FormResultDTO>> GetFormById(
+        int form_id,
+        int? lookupFieldId = null,
+        string? lookupFieldQuery = null)
     {
         var client = this._httpClientFactory.CreateClient();
 
@@ -77,6 +83,9 @@ public class FormController : ControllerBase
         var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
 
         var result = renderer.Render(formData);
+
+        if (lookupFieldId.HasValue && lookupFieldQuery is not null)
+            await lookupHandler.InjectChoices(result, formData, lookupFieldId.Value, lookupFieldQuery);
 
         return this.Ok(new FormResultDTO
         {
@@ -103,11 +112,14 @@ public class FormController : ControllerBase
         {
             var fieldDefinition = formData.design.elements
                 .Select(element => element.field)
-                .First(field => field?.field_id.ToString() == inputField.field_id);
+                .FirstOrDefault(field => field?.field_id.ToString() == inputField.field_id)
+                ?? throw new InvalidOperationException("Could not handle field:" + JsonConvert.SerializeObject(inputField));
 
-            var output = this.fieldHandlers
-                .First(h => h.CanHandle(fieldDefinition.type))
-                .Handle(inputField);
+            var handler = this.fieldHandlers
+                .FirstOrDefault(h => h.CanHandle(fieldDefinition.type))
+                ?? throw new InvalidOperationException("Could not handle field:" + JsonConvert.SerializeObject(fieldDefinition));
+                
+             var output = handler.Handle(inputField);
 
             formOut.fields.Add(output);
         }

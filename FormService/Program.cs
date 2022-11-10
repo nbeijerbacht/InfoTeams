@@ -11,6 +11,7 @@ internal class Program
 
         // Add services to the container.
         builder.Services.AddSingleton<IAdaptiveCardRenderer, AdaptiveCardRenderer>();
+        builder.Services.AddSingleton<ILookUpFieldInjector, LookupFieldInjector>();
 
         builder.Services.AddSingleton<IElementRenderer, HeaderRenderer>();
         builder.Services.AddSingleton<IElementRenderer, TextFieldRenderer>();
@@ -21,6 +22,9 @@ internal class Program
         builder.Services.AddSingleton<IElementRenderer, SubjectTreeFieldRenderer>();
         builder.Services.AddSingleton<IElementRenderer, CheckboxFieldRenderer>();
         builder.Services.AddSingleton<IElementRenderer, TimeFieldRenderer>();
+
+        builder.Services.AddSingleton<IElementRenderer, UserFieldRenderer>();
+        builder.Services.AddSingleton<ILookupFieldChoiceSearch, UserFieldRenderer>();
 
         builder.Services.AddSingleton<IFieldHandler, BooleanHandler>();
         builder.Services.AddSingleton<IFieldHandler, TextHandler>();

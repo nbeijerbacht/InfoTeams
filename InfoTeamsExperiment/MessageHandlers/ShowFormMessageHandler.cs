@@ -5,6 +5,7 @@ using Microsoft.Bot.Schema;
 using Newtonsoft.Json;
 using System.Net;
 using ZenyaBot.DTO;
+using ZenyaBot.Exceptions;
 using ZenyaBot.Interfaces;
 
 namespace ZenyaBot.MessageHandlers;
@@ -13,12 +14,12 @@ namespace ZenyaBot.MessageHandlers;
 public class ShowFormActionHandler : ITeamsActionHandler
 {
     private readonly ILogger<ShowFormActionHandler> logger;
-    private readonly IHttpClientFactory clientFactory;
+    private readonly IFormRetriever formRetriever;
 
-    public ShowFormActionHandler(ILogger<ShowFormActionHandler> logger, IHttpClientFactory clientFactory)
+    public ShowFormActionHandler(ILogger<ShowFormActionHandler> logger, IFormRetriever formRetriever)
     {
         this.logger = logger;
-        this.clientFactory = clientFactory;
+        this.formRetriever = formRetriever;
     }
 
     /// <inheritdoc />
@@ -28,30 +29,16 @@ public class ShowFormActionHandler : ITeamsActionHandler
     public async Task Handle(ITurnContext turnContext, IDictionary<string, object> messageData, CancellationToken cancellation = default)
     {
         var form_id = messageData["form_id"]?.ToString();
-        
-        var client = this.clientFactory.CreateClient();
-        var path = "https://localhost:7072/form/" + form_id;
-        var response = await client.GetAsync(path, cancellation);
-        
-        var json = await response.Content.ReadAsStringAsync(cancellation);
-
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        AdaptiveCard card;
+        try
+        {
+            card = await this.formRetriever.GetCardByFormId(form_id!);
+        }
+        catch (FormNotFound)
         {
             await turnContext.SendActivityAsync("No form was found please try again.");
             return;
         }
-
-        var result = JsonConvert.DeserializeObject<FormResultDTO>(json).Result;
-
-        var parsedCard = AdaptiveCard.FromJson(result);
-
-        foreach (var warning in parsedCard.Warnings)
-        {
-            this.logger.LogWarning($"Warning {(AdaptiveWarning.WarningStatusCode) warning.Code}" +
-                $"received when parsing Adaptive Card {warning.Message}");
-        }
-
-        var card = parsedCard.Card;
 
         card.Actions.Add(new AdaptiveSubmitAction
         {
