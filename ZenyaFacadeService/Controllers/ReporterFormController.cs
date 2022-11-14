@@ -14,9 +14,9 @@ namespace ZenyaFacadeService.Controllers;
 public class ReporterFormController : ControllerBase
 {
     private readonly ILogger<ReporterFormController> _logger;
-    private readonly IZenyaHttpClient _client;
+    private readonly IZenyaFormHttpClient _client;
 
-    public ReporterFormController(ILogger<ReporterFormController> logger, IZenyaHttpClient client)
+    public ReporterFormController(ILogger<ReporterFormController> logger, IZenyaFormHttpClient client)
     {
         _logger = logger;
         _client = client;
