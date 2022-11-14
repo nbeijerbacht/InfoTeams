@@ -28,10 +28,15 @@ public class LookUpFieldMessageHandler : ITeamsActionHandler
     public async Task Handle(ITurnContext turnContext, IDictionary<string, object> messageData, CancellationToken cancellation = default)
     {
         var formId = messageData["form_id"].ToString();
+
+        var lookUpId = messageData["id"].ToString()!;
+        var lookupQuery = messageData[lookUpId + "-search"].ToString()!;
+
         var card = await formRetriever.GetCardByFormId(
             formId!,
-            lookUpField: messageData[""]?.ToString() ?? "",
-            lookUpQuery: messageData[""]?.ToString() ?? "");
+            lookUpField: lookUpId,
+            lookUpQuery: lookupQuery
+            );
         formFiller.FillInFormValues(card.Body, messageData);
 
         var attachment = new Attachment
