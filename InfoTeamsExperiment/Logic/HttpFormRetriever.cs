@@ -1,4 +1,5 @@
 ﻿using AdaptiveCards;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Bot.Builder;
 using Newtonsoft.Json;
 using System.Net;
@@ -20,10 +21,16 @@ public class HttpFormRetriever : IFormRetriever
         this.clientFactory = clientFactory;
     }
 
-    public async Task<AdaptiveCard> GetCardByFormId(string formId)
+    public async Task<AdaptiveCard> GetCardByFormId(string formId, string lookUpField = "", string lookUpQuery = "")
     {
         var client = this.clientFactory.CreateClient();
-        var path = "https://localhost:7072/form/" + formId;
+        var query = new QueryBuilder()
+        {
+            {"lookupFieldId", lookUpField },
+            {"lookupFieldQuery", lookUpQuery },
+        };
+        var path = $"https://localhost:7072/form/{formId}?{query}";
+
         var response = await client.GetAsync(path);
 
         var json = await response.Content.ReadAsStringAsync();
@@ -41,6 +48,18 @@ public class HttpFormRetriever : IFormRetriever
                 $"received when parsing Adaptive Card {warning.Message}");
         }
 
+        parsedCard.Card.Actions.Add(new AdaptiveSubmitAction
+        {
+            Title = "Submit",
+            Id = formId,
+            DataJson = JsonConvert.SerializeObject(new
+            {
+                type = CustomActionType.SubmitForm.ToString(),
+                formId,
+            }),
+            Style = "positive",
+        });
+        
         return parsedCard.Card;
     }
 }

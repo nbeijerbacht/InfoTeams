@@ -1,4 +1,6 @@
-﻿using Microsoft.Bot.Builder;
+﻿using AdaptiveCards;
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Schema;
 using System.Threading;
 using ZenyaBot.DTO;
 using ZenyaBot.Interfaces;
@@ -25,13 +27,21 @@ public class LookUpFieldMessageHandler : ITeamsActionHandler
     /// <inheritdoc />
     public async Task Handle(ITurnContext turnContext, IDictionary<string, object> messageData, CancellationToken cancellation = default)
     {
-        var newActivity = MessageFactory.Text("The new text for the activity");
-        newActivity.Id = turnContext.Activity.ReplyToId;
-
         var formId = messageData["form_id"].ToString();
-        var card = await formRetriever.GetCardByFormId(formId!);
+        var card = await formRetriever.GetCardByFormId(
+            formId!,
+            lookUpField: messageData[""]?.ToString() ?? "",
+            lookUpQuery: messageData[""]?.ToString() ?? "");
         formFiller.FillInFormValues(card.Body, messageData);
 
-        await turnContext.UpdateActivityAsync(newActivity, cancellation);
+        var attachment = new Attachment
+        {
+            ContentType = AdaptiveCard.ContentType,
+            Content = card,
+        };
+        var activity = MessageFactory.Attachment(attachment);
+        activity.Id = turnContext.Activity.ReplyToId;
+
+        await turnContext.UpdateActivityAsync(activity, cancellation);
     }
 }

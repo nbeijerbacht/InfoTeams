@@ -20,6 +20,13 @@ public class AdaptiveCardRenderer : IAdaptiveCardRenderer
             Id = formData.form_id.ToString(),
         };
 
+        adaptiveCard.Body.Add(new AdaptiveTextInput
+        {
+            IsVisible = false,
+            Id = "form_id",
+            Value = formData.form_id.ToString(),
+        });
+
         return adaptiveCard;
     }
 

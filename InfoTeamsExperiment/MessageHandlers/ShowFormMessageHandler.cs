@@ -40,16 +40,6 @@ public class ShowFormActionHandler : ITeamsActionHandler
             return;
         }
 
-        card.Actions.Add(new AdaptiveSubmitAction
-        {
-            Title = "Submit",
-            DataJson = JsonConvert.SerializeObject(new
-            {
-                type = CustomActionType.SubmitForm.ToString(),
-                form_id,
-            }),
-        });
-
         var attachment = MessageFactory.Attachment(new Attachment
         {
             ContentType = AdaptiveCard.ContentType,
