@@ -21,10 +21,10 @@ public class LookupInformationController : ControllerBase
     }
 
     [HttpGet("search_users")]
-    public async Task<IEnumerable<UserDTO>> SearchThroughUsers([FromQuery(Name = "search")] string search)
+    public async Task<UserAndTeamDTO> SearchThroughUsers([FromQuery(Name = "search")] string search)
     {
         var json = await _client.FindUser(search);
-        var formData = JsonConvert.DeserializeObject<List<UserDTO>>(json);
+        var formData = JsonConvert.DeserializeObject<UserAndTeamDTO>(json);
 
         return formData;
     }

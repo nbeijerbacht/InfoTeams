@@ -25,12 +25,16 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
 
         var json = await response.Content.ReadAsStringAsync();
 
-        var users = JsonConvert.DeserializeObject<List<UserLookupDTO>>(json);
+        var parse = json.Replace("user_id", "id").Replace("team_id", "id");
 
-        return users.Select(u => new AdaptiveChoice()
+        var usersAndTeams = JsonConvert.DeserializeObject<UserAndTeamLookupDTO>(parse);
+
+        var combinedList = usersAndTeams.users.Union(usersAndTeams.teams);
+
+        return combinedList.Select(u => new AdaptiveChoice()
         {
             Title = u.name,
-            Value = u.user_id,
+            Value = u.id,
         });
     }
 
