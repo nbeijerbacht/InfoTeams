@@ -11,8 +11,18 @@ namespace ZenyaBot.Logic
             {
                 var element = elements
                     .Where(e => e.Id == key)
-                    .FirstOrDefault()
-                    ?? throw new InvalidOperationException($"Could not find element with id {key} in form");
+                    .FirstOrDefault();
+
+                if (element is null)
+                {
+                    // throw only for integer keys
+                    if (int.TryParse(key, out int _))
+                        throw new InvalidOperationException($"Could not find element with id {key} in form");
+                    else
+                        continue;
+                }
+                    
+                
 
                 var val = value.ToString()!;
 
