@@ -106,6 +106,7 @@ public class FormController : ControllerBase
         {
             form_id = formInput.form_id,
             fields = new List<FieldOutput>(),
+            is_draft = formInput.is_draft,
         };
 
         foreach (var inputField in formInput.fields)

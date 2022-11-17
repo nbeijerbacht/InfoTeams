@@ -30,4 +30,5 @@ public enum CustomActionType
     SelectForm,
     SubmitForm,
     LookUpField,
+    SaveAsDraft,
 }

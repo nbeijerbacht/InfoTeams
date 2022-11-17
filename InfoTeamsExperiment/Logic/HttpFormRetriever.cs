@@ -59,7 +59,18 @@ public class HttpFormRetriever : IFormRetriever
             }),
             Style = "positive",
         });
-        
+
+        parsedCard.Card.Actions.Add(new AdaptiveSubmitAction
+        {
+            Title = "Save as Draft",
+            Id = formId + "-draft",
+            DataJson = JsonConvert.SerializeObject(new
+            {
+                type = CustomActionType.SaveAsDraft.ToString(),
+                formId,
+            }),
+        });
+
         return parsedCard.Card;
     }
 }

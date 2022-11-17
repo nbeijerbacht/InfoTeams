@@ -36,6 +36,7 @@ builder.Services.AddSingleton<ITeamsCommandHandler, SearchFormCommandsHandler>()
 builder.Services.AddSingleton<ITeamsActionHandler, ShowFormActionHandler>();
 builder.Services.AddSingleton<ITeamsActionHandler, SubmitFormActionHandler>();
 builder.Services.AddSingleton<ITeamsActionHandler, LookUpFieldMessageHandler>();
+builder.Services.AddSingleton<ITeamsActionHandler, SaveAsDraftFormMessageHandler>();
 
 builder.Services.AddSingleton<IFormRetriever, HttpFormRetriever>();
 builder.Services.AddSingleton<IFormFiller, FormFiller>();

@@ -5,6 +5,8 @@ public class FormOutputDTO
     public string form_id { get; set; }
 
     public List<FieldOutput> fields { get; set; }
+
+    public bool is_draft { get; set; }
 }
 
 public class FieldOutput
