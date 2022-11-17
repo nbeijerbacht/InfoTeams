@@ -30,10 +30,10 @@ public class LookupInformationController : ControllerBase
     }
 
     [HttpGet("~/search_external_sources")]
-    public async Task<IEnumerable<ExternalSourceDTO>> SearchThroughExternalSource([FromQuery(Name = "external_source_id")] string externalSourceId)
+    public async Task<ExternalSourceDTO> SearchThroughExternalSource([FromQuery(Name = "external_source_id")] string externalSourceId)
     {
         var json = await _client.FindExternalSource(externalSourceId);
-        var formData = JsonConvert.DeserializeObject<List<ExternalSourceDTO>>(json);
+        var formData = JsonConvert.DeserializeObject<ExternalSourceDTO>(json);
 
         return formData;
     }
