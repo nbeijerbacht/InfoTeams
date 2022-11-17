@@ -1,27 +1,45 @@
 ﻿using AdaptiveCards;
 using FormService.DTO;
+using Newtonsoft.Json;
 
 namespace FormService.Logic;
 
 public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
 {
+
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public UserFieldRenderer(IHttpClientFactory httpClientFactory)
+    {
+        _httpClientFactory = httpClientFactory;
+    }
+
+
     public bool CanHandle(Element e) => e is { element_type: "field", field.type: "user" };
 
     public async Task<IEnumerable<AdaptiveChoice>> GetChoices(Element element, string query)
     {
-        return new List<AdaptiveChoice>
+        var client =  _httpClientFactory.CreateClient();
+
+        var response = await client.GetAsync($"https://localhost:7071/lookupinformation/search_users?search={query}");
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        var users = JsonConvert.DeserializeObject<List<UserLookupDTO>>(json);
+
+        List<AdaptiveChoice> choices = new List<AdaptiveChoice>();
+
+        foreach (UserLookupDTO user in users)
         {
-            new ()
-            {
-                Title = "John Doe",
-                Value = "1",
-            },
-            new ()
-            {
-                Title = "Jane Doe",
-                Value = "2",
-            },
-        };
+            var choice = new AdaptiveChoice() { 
+                Title = user.name,
+                Value = user.user_id,
+            };
+
+            choices.Add(choice);
+        }
+
+        return choices;
     }
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)
