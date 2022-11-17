@@ -27,19 +27,11 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
 
         var users = JsonConvert.DeserializeObject<List<UserLookupDTO>>(json);
 
-        List<AdaptiveChoice> choices = new List<AdaptiveChoice>();
-
-        foreach (UserLookupDTO user in users)
+        return users.Select(u => new AdaptiveChoice()
         {
-            var choice = new AdaptiveChoice() { 
-                Title = user.name,
-                Value = user.user_id,
-            };
-
-            choices.Add(choice);
-        }
-
-        return choices;
+            Title = u.name,
+            Value = u.user_id,
+        });
     }
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)

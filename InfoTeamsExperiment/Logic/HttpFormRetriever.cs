@@ -29,7 +29,7 @@ public class HttpFormRetriever : IFormRetriever
             {"lookupFieldId", lookUpField },
             {"lookupFieldQuery", lookUpQuery },
         };
-        var path = $"https://localhost:7072/form/{formId}?{query}";
+        var path = $"https://localhost:7072/form/{formId}{query}";
 
         var response = await client.GetAsync(path);
 

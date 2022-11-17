@@ -30,6 +30,7 @@ internal class Program
         builder.Services.AddSingleton<IFieldHandler, TextHandler>();
         builder.Services.AddSingleton<IFieldHandler, NumericHandler>();
         builder.Services.AddSingleton<IFieldHandler, DateHandler>();
+        builder.Services.AddSingleton<IFieldHandler, ListOfStringsHandler>();
 
         builder.Services.AddHttpClient();
         builder.Services.AddControllers();

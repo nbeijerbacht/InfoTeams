@@ -29,7 +29,7 @@ public class ZenyaLookupHttpClient : IZenyaLookupHttpClient
     public async Task<string> FindUser(string search)
     {
         var client = _httpClientFactory.CreateClient("ZenyaClient");
-        var path = $"https://msteams.zenya.work/api/users?name={search}&limit=10";
+        var path = $"https://msteams.zenya.work/api/users?name={search}&limit=20";
 
         var response = await client.GetAsync(path);
 
