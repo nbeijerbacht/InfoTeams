@@ -21,10 +21,10 @@ public class LookupInformationController : ControllerBase
     }
 
     [HttpGet("search_users")]
-    public async Task<UserAndTeamDTO> SearchThroughUsers([FromQuery(Name = "search")] string search)
+    public async Task<IEnumerable<UserDTO>> SearchThroughUsers([FromQuery(Name = "search")] string search)
     {
         var json = await _client.FindUser(search);
-        var formData = JsonConvert.DeserializeObject<UserAndTeamDTO>(json);
+        var formData = JsonConvert.DeserializeObject<List<UserDTO>>(json);
 
         return formData;
     }
@@ -34,6 +34,15 @@ public class LookupInformationController : ControllerBase
     {
         var json = await _client.FindExternalSource(externalSourceId);
         var formData = JsonConvert.DeserializeObject<ExternalSourceDTO>(json);
+
+        return formData;
+    }
+
+    [HttpGet("search_teams")]
+    public async Task<IEnumerable<TeamDTO>> SearchThroughTeams([FromQuery(Name = "search")] string search)
+    {
+        var json = await _client.FindTeam(search);
+        var formData = JsonConvert.DeserializeObject<List<TeamDTO>>(json);
 
         return formData;
     }

@@ -1,6 +1,7 @@
 ﻿using AdaptiveCards;
 using FormService.DTO;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace FormService.Logic;
 
@@ -21,20 +22,26 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
     {
         var client =  _httpClientFactory.CreateClient();
 
-        var response = await client.GetAsync($"https://localhost:7071/lookupinformation/search_users?search={query}");
+        var responseUser = await client.GetAsync($"https://localhost:7071/lookupinformation/search_users?search={query}");
+        var responseTeam = await client.GetAsync($"https://localhost:7071/lookupinformation/search_teams?search={query}");
 
-        var json = await response.Content.ReadAsStringAsync();
+        var jsonUser = await responseUser.Content.ReadAsStringAsync();
+        var jsonTeam = await responseTeam.Content.ReadAsStringAsync();
 
-        var parse = json.Replace("user_id", "id").Replace("team_id", "id");
+        var parseUser = Regex.Replace(jsonUser, string.Format(@"\b{0}\b", "user_id"), "id");
+        var parseTeam = Regex.Replace(jsonTeam, string.Format(@"\b{0}\b", "team_id"), "id");
 
-        var usersAndTeams = JsonConvert.DeserializeObject<UserAndTeamLookupDTO>(parse);
+        var users = JsonConvert.DeserializeObject<List<UserAndTeamLookupDTO>>(parseUser);
+        var teams = JsonConvert.DeserializeObject<List<UserAndTeamLookupDTO>>(parseTeam);
 
-        var combinedList = usersAndTeams.users.Union(usersAndTeams.teams);
+        var combinedList = users.Union(teams);
 
-        return combinedList.Select(u => new AdaptiveChoice()
+        combinedList = combinedList.OrderBy(value => value.name);
+
+        return combinedList.Select(v => new AdaptiveChoice()
         {
-            Title = u.name,
-            Value = u.id,
+            Title = v.name,
+            Value = v.id,
         });
     }
 

@@ -29,17 +29,25 @@ public class ZenyaLookupHttpClient : IZenyaLookupHttpClient
     public async Task<string> FindUser(string search)
     {
         var client = _httpClientFactory.CreateClient("ZenyaClient");
-        var path1 = $"https://msteams.zenya.work/api/users?name={search}&limit=20";
-        var path2 = $"https://msteams.zenya.work/api/teams?limit=20&offset=0&name_contains={search}";
+        var path = $"https://msteams.zenya.work/api/users?name={search}&limit=20";
 
-        var responseUser = await client.GetAsync(path1);
-        var responseTeam = await client.GetAsync(path2);
+        var response = await client.GetAsync(path);
 
-        if (responseUser.StatusCode != HttpStatusCode.OK) throw new AuthenticationException();
-        if (responseTeam.StatusCode != HttpStatusCode.OK) throw new AuthenticationException();
+        if (response.StatusCode != HttpStatusCode.OK) throw new AuthenticationException();
 
-        var result = "{'users':" + await responseUser.Content.ReadAsStringAsync() + ", 'teams':" + await responseTeam.Content.ReadAsStringAsync() + "}";
+        return await response.Content.ReadAsStringAsync();
+    }
 
-        return result;
+    public async Task<string> FindTeam(string search)
+    {
+        var client = _httpClientFactory.CreateClient("ZenyaClient");
+        var path = $"https://msteams.zenya.work/api/teams?limit=20&offset=0&name_contains={search}";
+
+        var response = await client.GetAsync(path);
+
+        if (response.StatusCode != HttpStatusCode.OK) throw new AuthenticationException();
+
+
+        return await response.Content.ReadAsStringAsync();
     }
 }
