@@ -4,9 +4,7 @@ namespace FormService.Logic;
 
 public class TextHandler : IFieldHandler
 {
-    private static string[] types = new[] { "text", "formatted_text", "email", "web_page", "time" };
-
-    public bool CanHandle(string type) => types.Contains(type);
+    public bool CanHandle(string type) => type is "text" or "formatted_text" or "email" or "web_page" or "time";
 
     public FieldOutput Handle(FieldInput field) => new FieldOutput(field);
 }

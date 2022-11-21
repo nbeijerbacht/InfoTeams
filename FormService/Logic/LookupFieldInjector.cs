@@ -14,7 +14,7 @@ public class LookupFieldInjector : ILookUpFieldInjector
         this.lookupHandlers = lookupHandlers;
     }
 
-    public async Task InjectChoices(AdaptiveCard card, ReportFormDTO formData, int fieldId, string query)
+    public async Task InjectChoices(AdaptiveCard card, ReportFormDTO formData, int fieldId, string? query)
     {
         var definition = formData.design.elements
             .Where(e => e.field?.field_id == fieldId)

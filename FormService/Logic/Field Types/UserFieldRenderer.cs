@@ -17,29 +17,42 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
 
     public bool CanHandle(Element e) => e is { element_type: "field", field.type: "user" };
 
-    public async Task<IEnumerable<AdaptiveChoice>> GetChoices(Element element, string query)
+    public async Task<IEnumerable<AdaptiveChoice>> GetChoices(Element element, string? query)
     {
         var client =  _httpClientFactory.CreateClient();
 
-        var response = await client.GetAsync($"https://localhost:7071/lookupinformation/search_users?search={query}");
+        var search = query is null ? "" : "search=" + query;
 
-        var json = await response.Content.ReadAsStringAsync();
+        var responseUserTask = client.GetAsync($"https://localhost:7071/lookupinformation/search_users?{search}");
+        var responseTeamTask = client.GetAsync($"https://localhost:7071/lookupinformation/search_teams?{search}");
 
-        var users = JsonConvert.DeserializeObject<List<UserLookupDTO>>(json);
+        var responseUser = await responseUserTask;
+        var jsonUser = await responseUser.Content.ReadAsStringAsync();
 
-        List<AdaptiveChoice> choices = new List<AdaptiveChoice>();
+        var responseTeam = await responseTeamTask;
+        var jsonTeam = await responseTeam.Content.ReadAsStringAsync();
 
-        foreach (UserLookupDTO user in users)
+        var userChoices = JsonConvert
+            .DeserializeObject<List<UserDTO>>(jsonUser)
+            .Select(user => new AdaptiveChoice()
         {
-            var choice = new AdaptiveChoice() { 
-                Title = user.name,
-                Value = user.user_id,
-            };
+            Title = user.name,
+            Value = user.user_id,
+        });
 
-            choices.Add(choice);
-        }
+        var teamChoices = JsonConvert
+            .DeserializeObject<List<TeamDTO>>(jsonTeam)
+            .Select(team => new AdaptiveChoice()
+        {
+            Title = team.name,
+            Value = team.team_id,
+        });
 
-        return choices;
+        var combinedList = userChoices
+            .Concat(teamChoices)
+            .OrderBy(value => value.Title);
+
+        return combinedList;
     }
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)

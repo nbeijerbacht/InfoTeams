@@ -5,5 +5,5 @@ namespace FormService.Logic;
 
 public interface ILookUpFieldInjector
 {
-    Task InjectChoices(AdaptiveCard card, ReportFormDTO formData, int fieldId, string query);
+    Task InjectChoices(AdaptiveCard card, ReportFormDTO formData, int fieldId, string? query);
 }

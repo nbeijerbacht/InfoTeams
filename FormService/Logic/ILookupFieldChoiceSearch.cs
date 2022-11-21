@@ -7,5 +7,5 @@ public interface ILookupFieldChoiceSearch
 {
     bool CanHandle(Element element);
 
-    Task<IEnumerable<AdaptiveChoice>> GetChoices(Element element, string query);
+    Task<IEnumerable<AdaptiveChoice>> GetChoices(Element element, string? query);
 }

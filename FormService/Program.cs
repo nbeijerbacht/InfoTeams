@@ -23,6 +23,7 @@ internal class Program
         builder.Services.AddSingleton<IElementRenderer, CheckboxFieldRenderer>();
         builder.Services.AddSingleton<IElementRenderer, TimeFieldRenderer>();
 
+        builder.Services.AddSingleton<IElementRenderer, PositionFieldRenderer>();
         builder.Services.AddSingleton<IElementRenderer, UserFieldRenderer>();
         builder.Services.AddSingleton<ILookupFieldChoiceSearch, UserFieldRenderer>();
 
@@ -30,6 +31,7 @@ internal class Program
         builder.Services.AddSingleton<IFieldHandler, TextHandler>();
         builder.Services.AddSingleton<IFieldHandler, NumericHandler>();
         builder.Services.AddSingleton<IFieldHandler, DateHandler>();
+        builder.Services.AddSingleton<IFieldHandler, ListOfStringsHandler>();
 
         builder.Services.AddHttpClient();
         builder.Services.AddControllers();

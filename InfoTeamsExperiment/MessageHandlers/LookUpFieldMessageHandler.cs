@@ -30,12 +30,14 @@ public class LookUpFieldMessageHandler : ITeamsActionHandler
         var formId = messageData["form_id"].ToString();
 
         var lookUpId = messageData["id"].ToString()!;
-        var lookupQuery = messageData[lookUpId + "-search"].ToString()!;
+
+        if (messageData.TryGetValue(lookUpId + "-search", out object? lookupQuery) is false)
+            lookupQuery = "";
 
         var card = await formRetriever.GetCardByFormId(
             formId!,
             lookUpField: lookUpId,
-            lookUpQuery: lookupQuery
+            lookUpQuery: lookupQuery?.ToString() ?? ""
             );
         formFiller.FillInFormValues(card.Body, messageData);
 
