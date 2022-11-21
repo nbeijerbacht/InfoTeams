@@ -32,7 +32,7 @@ public class SubmitFormActionHandler : ITeamsActionHandler
 
         foreach (var (key, value) in messageData)
         {
-            if (int.TryParse(key, out int _) is true)
+            if (int.TryParse(key, out int _) is true && value is not "")
             {
                 form.fields.Add(new FieldDTO
                 {

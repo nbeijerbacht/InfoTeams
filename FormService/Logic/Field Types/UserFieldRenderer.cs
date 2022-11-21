@@ -61,6 +61,7 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
         {
             Label = e.text,
             Id = e.field.field_id.ToString() + "-search",
+            Placeholder = "Search for " + e.text,
             InlineAction = new AdaptiveSubmitAction()
             {
                 Title = "Search",
@@ -76,14 +77,7 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
         yield return new AdaptiveChoiceSetInput
         {
             Id = e.field.field_id.ToString(),
-            //Value = e.field.default_value?.ToString(),
-            //Choices = e.field.list_items?.Select(item =>
-            //    new AdaptiveChoice
-            //    {
-            //        Title = item.name,
-            //        Value = item.list_item_id.ToString(),
-            //    }
-            //)?.ToList()
+            Label = "Choose " + e.text,
         };
     }
 }
