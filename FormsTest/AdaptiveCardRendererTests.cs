@@ -50,6 +50,7 @@ public class AdaptiveCardRendererTests
     {
         var card = this.renderer.Render(new ReportFormDTO
         {
+            form_id= 42,
             design = new DesignDTO
             {
                 elements =
@@ -59,8 +60,16 @@ public class AdaptiveCardRendererTests
             }
         });
 
-        card.Body.Count.Should().Be(1);
+        var id_field = new AdaptiveTextInput
+        {
+            IsVisible = false,
+            Id = "form_id",
+            Value = "42",
+        };
+
+        card.Body.Count.Should().Be(2);
         card.Body[0].Should().BeSameAs(this.textAdaptiveBlock);
+        card.Body[1].Should().BeSameAs(id_field);
 
         card = this.renderer.Render(new ReportFormDTO
         {
@@ -74,9 +83,11 @@ public class AdaptiveCardRendererTests
             }
         });
 
-        card.Body.Count.Should().Be(2);
+        card.Body.Count.Should().Be(3);
         card.Body[0].Should().BeSameAs(this.textAdaptiveBlock);
         card.Body[1].Should().BeSameAs(this.numberBlock);
+        card.Body[2].Should().BeSameAs(id_field);
+
 
         // switch them the other way around
         card = this.renderer.Render(new ReportFormDTO
@@ -91,9 +102,10 @@ public class AdaptiveCardRendererTests
             }
         });
 
-        card.Body.Count.Should().Be(2);
+        card.Body.Count.Should().Be(3);
         card.Body[0].Should().BeSameAs(this.numberBlock);
         card.Body[1].Should().BeSameAs(this.textAdaptiveBlock);
+        card.Body[2].Should().BeSameAs(id_field);
     }
 
     [Fact]

@@ -28,21 +28,27 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
         var jsonUser = await responseUser.Content.ReadAsStringAsync();
         var jsonTeam = await responseTeam.Content.ReadAsStringAsync();
 
-        var parseUser = Regex.Replace(jsonUser, string.Format(@"\b{0}\b", "user_id"), "id");
-        var parseTeam = Regex.Replace(jsonTeam, string.Format(@"\b{0}\b", "team_id"), "id");
-
-        var users = JsonConvert.DeserializeObject<List<UserAndTeamLookupDTO>>(parseUser);
-        var teams = JsonConvert.DeserializeObject<List<UserAndTeamLookupDTO>>(parseTeam);
-
-        var combinedList = users.Union(teams);
-
-        combinedList = combinedList.OrderBy(value => value.name);
-
-        return combinedList.Select(v => new AdaptiveChoice()
+        var userChoices = JsonConvert
+            .DeserializeObject<List<UserDTO>>(jsonUser)
+            .Select(user => new AdaptiveChoice()
         {
-            Title = v.name,
-            Value = v.id,
+            Title = user.name,
+            Value = user.user_id,
         });
+
+        var teamChoices = JsonConvert
+            .DeserializeObject<List<TeamDTO>>(jsonTeam)
+            .Select(team => new AdaptiveChoice()
+        {
+            Title = team.name,
+            Value = team.team_id,
+        });
+
+        var combinedList = userChoices
+            .Concat(teamChoices)
+            .OrderBy(value => value.Title);
+
+        return combinedList;
     }
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)
