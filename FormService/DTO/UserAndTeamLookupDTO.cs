@@ -11,3 +11,9 @@ public class UserDTO
     public string name { get; set; }
     public string user_id { get; set; }
 }
+
+public class PositionDTO
+{
+    public string name { get; set; }
+    public string id { get; set; }
+}

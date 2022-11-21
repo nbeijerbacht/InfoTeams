@@ -4,7 +4,7 @@ namespace FormService.Logic;
 
 public class ListOfStringsHandler : IFieldHandler
 {
-    public bool CanHandle(string type) => type is "user";
+    public bool CanHandle(string type) => type is "user" or "position";
 
     public FieldOutput Handle(FieldInput field) => new FieldOutput(field)
     {

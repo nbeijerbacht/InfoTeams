@@ -84,7 +84,7 @@ public class FormController : ControllerBase
 
         var result = renderer.Render(formData);
 
-        if (lookupFieldId.HasValue && lookupFieldQuery is not null)
+        if (lookupFieldId.HasValue)
             await lookupHandler.InjectChoices(result, formData, lookupFieldId.Value, lookupFieldQuery);
 
         return this.Ok(new FormResultDTO

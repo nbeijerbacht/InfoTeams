@@ -1,7 +1,6 @@
 ﻿using AdaptiveCards;
 using FormService.DTO;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 
 namespace FormService.Logic;
 
@@ -18,14 +17,19 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
 
     public bool CanHandle(Element e) => e is { element_type: "field", field.type: "user" };
 
-    public async Task<IEnumerable<AdaptiveChoice>> GetChoices(Element element, string query)
+    public async Task<IEnumerable<AdaptiveChoice>> GetChoices(Element element, string? query)
     {
         var client =  _httpClientFactory.CreateClient();
 
-        var responseUser = await client.GetAsync($"https://localhost:7071/lookupinformation/search_users?search={query}");
-        var responseTeam = await client.GetAsync($"https://localhost:7071/lookupinformation/search_teams?search={query}");
+        var search = query is null ? "" : "search=" + query;
 
+        var responseUserTask = client.GetAsync($"https://localhost:7071/lookupinformation/search_users?{search}");
+        var responseTeamTask = client.GetAsync($"https://localhost:7071/lookupinformation/search_teams?{search}");
+
+        var responseUser = await responseUserTask;
         var jsonUser = await responseUser.Content.ReadAsStringAsync();
+
+        var responseTeam = await responseTeamTask;
         var jsonTeam = await responseTeam.Content.ReadAsStringAsync();
 
         var userChoices = JsonConvert
