@@ -6,5 +6,5 @@ public interface IFieldHandler
 {
     bool CanHandle(string type);
 
-    FieldOutput Handle(FieldInput field);
+    FieldOutput? Handle(FieldInput field);
 }

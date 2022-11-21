@@ -122,7 +122,7 @@ public class FormController : ControllerBase
                 
              var output = handler.Handle(inputField);
 
-            formOut.fields.Add(output);
+            if (output != null) formOut.fields.Add(output);
         }
 
         var postResponse = await client.PostAsJsonAsync($"https://localhost:7071/reporterForm/", formOut);
