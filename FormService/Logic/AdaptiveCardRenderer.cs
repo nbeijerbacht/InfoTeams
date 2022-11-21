@@ -14,10 +14,18 @@ public class AdaptiveCardRenderer : IAdaptiveCardRenderer
     }
     public AdaptiveCard Render(ReportFormDTO formData)
     {
-        var adaptiveCard = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
+        var adaptiveCard = new AdaptiveCard(new AdaptiveSchemaVersion(1, 4))
         {
             Body = formData.design.elements.SelectMany(this.ParseElement).ToList(),
+            Id = formData.form_id.ToString(),
         };
+
+        adaptiveCard.Body.Add(new AdaptiveTextInput
+        {
+            IsVisible = false,
+            Id = "form_id",
+            Value = formData.form_id.ToString(),
+        });
 
         return adaptiveCard;
     }

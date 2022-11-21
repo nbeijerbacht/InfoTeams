@@ -21,7 +21,7 @@ internal class ZenyaFacadeFactory : WebApplicationFactory<ZenyaFacadeService.Sta
     {
         builder.ConfigureServices(services =>
         {
-            var clientMock = new Mock<IZenyaHttpClient>();
+            var clientMock = new Mock<IZenyaFormHttpClient>();
             clientMock.Setup(c => c.GetAllForms()).ReturnsAsync(MockData.mockAllForms);
             clientMock.Setup(c => c.GetFormById(2216)).ReturnsAsync(MockData.mockFormById);
             clientMock.Setup(c => c.PostForm(It.IsAny<JsonElement>())).ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));

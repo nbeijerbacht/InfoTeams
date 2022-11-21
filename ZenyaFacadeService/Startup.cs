@@ -15,7 +15,8 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         // Add services to the container.
-        services.AddScoped<IZenyaHttpClient, ZenyaHttpClient>();
+        services.AddScoped<IZenyaFormHttpClient, ZenyaFormHttpClient>();
+        services.AddScoped<IZenyaLookupHttpClient, ZenyaLookupHttpClient>();
         services.AddControllers();
         services.AddHttpClient("ZenyaClient", c => c.DefaultRequestHeaders.Add("X-Api-Version", "3"));
 

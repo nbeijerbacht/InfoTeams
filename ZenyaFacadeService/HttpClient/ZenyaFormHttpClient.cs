@@ -3,11 +3,11 @@ using System.Text.Json;
 
 namespace ZenyaFacadeService.HttpClient;
 
-public class ZenyaHttpClient : IZenyaHttpClient
+public class ZenyaFormHttpClient : IZenyaFormHttpClient
 {
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public ZenyaHttpClient(IHttpClientFactory httpClientFactory)
+    public ZenyaFormHttpClient(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }
