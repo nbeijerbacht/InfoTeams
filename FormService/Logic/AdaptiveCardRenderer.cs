@@ -31,8 +31,6 @@ public class AdaptiveCardRenderer : IAdaptiveCardRenderer
             Value = formData.form_id.ToString(),
             Id = "form_id",
             Label = "",
-            //IsRequired = true,
-            //ErrorMessage = "error here",
         });
 
         return adaptiveCard;
