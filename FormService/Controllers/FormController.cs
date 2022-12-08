@@ -81,17 +81,6 @@ public class FormController : ControllerBase
         var json = await response.Content.ReadAsStringAsync();
 
         var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
-        //int i = 0;
-        //foreach (var a in formData.design.elements)
-        //{
-        //    if (a.field != null)
-        //    { 
-        //        if (a.field.required == true)
-        //        {
-        //            formData.design.elements[a.element_id].field.isRequired = true;
-        //        }
-        //    }
-        //}
 
         var result = renderer.Render(formData);
 
