@@ -20,11 +20,19 @@ public class AdaptiveCardRenderer : IAdaptiveCardRenderer
             Id = formData.form_id.ToString(),
         };
 
+        foreach (var a in formData.design.elements)
+                if (a?.field?.required == true)
+                    if (adaptiveCard.Body[a.element_id] is AdaptiveInput inp)
+                        inp.IsRequired = true;
+
         adaptiveCard.Body.Add(new AdaptiveTextInput
         {
             IsVisible = false,
-            Id = "form_id",
             Value = formData.form_id.ToString(),
+            Id = "form_id",
+            Label = "",
+            //IsRequired = true,
+            //ErrorMessage = "error here",
         });
 
         return adaptiveCard;
