@@ -26,6 +26,7 @@ public class Field
     public string type { get; set; }
     public int field_id { get; set; }
     public bool required { get; set; }
+    public bool? isRequired { get; set; }
     public bool read_only { get; set; }
     public JToken default_value { get; set; }
     public string description { get; set; }
