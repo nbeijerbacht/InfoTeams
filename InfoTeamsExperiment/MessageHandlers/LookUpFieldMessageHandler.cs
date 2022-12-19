@@ -10,13 +10,16 @@ namespace ZenyaBot.MessageHandlers;
 /// <inheritdoc />
 public class LookUpFieldMessageHandler : ITeamsActionHandler
 {
+    private readonly IConfiguration config;
     private readonly IFormFiller formFiller;
     private readonly IFormRetriever formRetriever;
 
     public LookUpFieldMessageHandler(
+        IConfiguration config,
         IFormFiller formFiller,
         IFormRetriever formRetriever)
     {
+        this.config = config;
         this.formFiller = formFiller;
         this.formRetriever = formRetriever;
     }
@@ -34,7 +37,7 @@ public class LookUpFieldMessageHandler : ITeamsActionHandler
         if (messageData.TryGetValue(lookUpId + "-search", out object? lookupQuery) is false)
             lookupQuery = "";
 
-        var card = await formRetriever.GetCardByFormId(
+        var card = await this.formRetriever.GetCardByFormId(
             formId!,
             lookUpField: lookUpId,
             lookUpQuery: lookupQuery?.ToString() ?? ""

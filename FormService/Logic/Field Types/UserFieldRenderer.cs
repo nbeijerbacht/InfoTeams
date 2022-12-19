@@ -8,14 +8,17 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
 {
 
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration config;
 
-    public UserFieldRenderer(IHttpClientFactory httpClientFactory)
+    public UserFieldRenderer(IHttpClientFactory httpClientFactory, IConfiguration config)
     {
         _httpClientFactory = httpClientFactory;
+        this.config = config;
     }
 
-
     public bool CanHandle(Element e) => e is { element_type: "field", field.type: "user" };
+
+    private string FacadeServiceUrl => this.config.GetSection("Services")["FacadeService"];
 
     public async Task<IEnumerable<AdaptiveChoice>> GetChoices(Element element, string? query)
     {
@@ -23,8 +26,8 @@ public class UserFieldRenderer : IElementRenderer, ILookupFieldChoiceSearch
 
         var search = query is null ? "" : "search=" + query;
 
-        var responseUserTask = client.GetAsync($"https://localhost:7071/lookupinformation/search_users?{search}");
-        var responseTeamTask = client.GetAsync($"https://localhost:7071/lookupinformation/search_teams?{search}");
+        var responseUserTask = client.GetAsync($"{FacadeServiceUrl}lookupinformation/search_users?{search}");
+        var responseTeamTask = client.GetAsync($"{FacadeServiceUrl}lookupinformation/search_teams?{search}");
 
         var responseUser = await responseUserTask;
         var jsonUser = await responseUser.Content.ReadAsStringAsync();

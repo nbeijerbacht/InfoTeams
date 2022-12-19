@@ -2,14 +2,20 @@
   "profiles": {
     "Microsoft Teams (browser)": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "launchUrl": "https://teams.microsoft.com/l/app/b3de159d-29cc-484e-ba4a-bb86b42d9568?installAppPackage=true&webjoin=true&appTenantId=a4902f43-7b00-4b65-9907-7b084db98898&login_hint=anthony@vfjcd.onmicrosoft.com",
-      "applicationUrl": "http://localhost:5130",
+      "launchUrl": "https://teams.microsoft.com/l/app/f4d32c4c-edc3-41a7-8732-ac85773bf325?installAppPackage=true&webjoin=true&appTenantId=a4902f43-7b00-4b65-9907-7b084db98898&login_hint=mihail@vfjcd.onmicrosoft.com",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
+      "dotnetRunMessages": "true",
+      "applicationUrl": "http://localhost:5130",
       "hotReloadProfile": "aspnetcore"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/l/app/d7e4862a-3699-4bb7-8a31-53e780e18a5f?installAppPackage=true&webjoin=true&appTenantId=a4902f43-7b00-4b65-9907-7b084db98898&login_hint=mihail@vfjcd.onmicrosoft.com",
+      "publishAllPorts": true
     }
   }
 }

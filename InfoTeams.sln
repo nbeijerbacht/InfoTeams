@@ -9,10 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZenyaFacadeService", "Zenya
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FormService", "FormService\FormService.csproj", "{5F0ADB68-083D-4BDA-B1F8-18B8566D7919}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsTest", "FormsTest\FormsTest.csproj", "{2C75C9FF-D0E5-4E2D-9C50-A8817933C02B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FormsTest", "FormsTest\FormsTest.csproj", "{2C75C9FF-D0E5-4E2D-9C50-A8817933C02B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZenyaFacadeTest", "ZenyaFacadeTest\ZenyaFacadeTest.csproj", "{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndToEndTest", "EndToEndTest\EndToEndTest.csproj", "{FD338897-549D-40D9-BFE5-37A273102C01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZenyaFacadeTest", "ZenyaFacadeTest\ZenyaFacadeTest.csproj", "{55D9F7EA-04F0-445B-A7B0-9CCADBFDE17B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndToEndTest", "EndToEndTest\EndToEndTest.csproj", "{FD338897-549D-40D9-BFE5-37A273102C01}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E43E867F-3F8F-40FF-B563-CC4ECF1C4128}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +49,10 @@ Global
 		{FD338897-549D-40D9-BFE5-37A273102C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD338897-549D-40D9-BFE5-37A273102C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD338897-549D-40D9-BFE5-37A273102C01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E43E867F-3F8F-40FF-B563-CC4ECF1C4128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E43E867F-3F8F-40FF-B563-CC4ECF1C4128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E43E867F-3F8F-40FF-B563-CC4ECF1C4128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E43E867F-3F8F-40FF-B563-CC4ECF1C4128}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

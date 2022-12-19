@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  zenyafacadeservice:
+    image: ${DOCKER_REGISTRY-}zenyafacadeservice
+    build:
+      context: .
+      dockerfile: ZenyaFacadeService/Dockerfile
+
+  zenyabot:
+    image: ${DOCKER_REGISTRY-}zenyabot
+    build:
+      context: .
+      dockerfile: InfoTeamsExperiment/Dockerfile
+
+  formservice:
+    image: ${DOCKER_REGISTRY-}formservice
+    build:
+      context: .
+      dockerfile: FormService/Dockerfile

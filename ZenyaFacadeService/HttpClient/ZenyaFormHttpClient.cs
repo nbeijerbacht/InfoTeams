@@ -15,7 +15,7 @@ public class ZenyaFormHttpClient : IZenyaFormHttpClient
     public async Task<string> GetAllForms()
     {
         var client = _httpClientFactory.CreateClient("ZenyaClient");
-        var path = "https://msteams.zenya.work/api/cases/reporter_forms";
+        var path = "https://msteams.zenya.work/api/cases/reporter_forms?can_report=true";
 
         var response = await client.GetAsync(path);
 

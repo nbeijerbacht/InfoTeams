@@ -16,18 +16,24 @@ public class SearchFormCommandsHandler : ITeamsCommandHandler
 {
     private readonly ILogger<SearchFormCommandsHandler> _logger;
     private readonly IHttpClientFactory clientFactory;
+    private readonly IConfiguration config;
     private const string commandName = "search";
-
     public IEnumerable<ITriggerPattern> TriggerPatterns => new List<ITriggerPattern>
     {
         // Used to trigger the command handler if the command text contains 'helloWorld'
-        new RegExpTrigger("^" + commandName)
+        new RegExpTrigger("^" + commandName),
     };
 
-    public SearchFormCommandsHandler(ILogger<SearchFormCommandsHandler> logger, IHttpClientFactory clientFactory)
+    private string FormServiceUrl => this.config.GetSection("Services")["FormService"];
+
+    public SearchFormCommandsHandler(
+        ILogger<SearchFormCommandsHandler> logger,
+        IHttpClientFactory clientFactory,
+        IConfiguration config)
     {
         _logger = logger;
         this.clientFactory = clientFactory;
+        this.config = config;
     }
 
     public async Task<ICommandResponse> HandleCommandAsync(ITurnContext turnContext, CommandMessage message, CancellationToken cancellationToken = default)
@@ -36,9 +42,8 @@ public class SearchFormCommandsHandler : ITeamsCommandHandler
         _logger?.LogInformation($"Bot received search: {searchString}");
 
         var client = this.clientFactory.CreateClient();
-        var path = "https://localhost:7072/form?search=" + searchString;
+        var path = this.FormServiceUrl + "form?search=" + searchString;
         var response = await client.GetAsync(path);
-
 
         var json = await response.Content.ReadAsStringAsync(cancellationToken);
         var adaptiveCards = JsonConvert.DeserializeObject<SearchResultDTO>(json);
@@ -53,8 +58,8 @@ public class SearchFormCommandsHandler : ITeamsCommandHandler
                     {
                         Size = AdaptiveTextSize.Medium,
                         Color = AdaptiveTextColor.Warning,
-                    }
-                }
+                    },
+                },
             };
             return new ActivityCommandResponse(
                 MessageFactory.Attachment(new Attachment()

@@ -8,21 +8,24 @@ public class PositionFieldRenderer : IElementRenderer
 {
 
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration config;
 
-    public PositionFieldRenderer(IHttpClientFactory httpClientFactory)
+    public PositionFieldRenderer(IHttpClientFactory httpClientFactory, IConfiguration config)
     {
         _httpClientFactory = httpClientFactory;
+        this.config = config;
     }
 
-
     public bool CanHandle(Element e) => e is { element_type: "field", field.type: "position" };
+
+    private string FacadeServiceUrl => this.config.GetSection("Services")["FacadeService"];
 
     public IEnumerable<AdaptiveElement> RenderElements(Element e)
     {
         var client = _httpClientFactory.CreateClient();
 
         var response = client
-            .GetAsync($"https://localhost:7071/lookupinformation/get_positions")
+            .GetAsync($"{FacadeServiceUrl}lookupinformation/get_positions")
             .GetAwaiter()
             .GetResult();
 
