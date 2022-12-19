@@ -3,20 +3,19 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["FormService.csproj", "FormService/"]
-RUN dotnet restore "FormService/FormService.csproj"
-WORKDIR "/src/FormService"
+COPY ["ZenyaBot.csproj", "InfoTeamsExperiment/"]
+RUN dotnet restore "InfoTeamsExperiment/ZenyaBot.csproj"
+WORKDIR "/src/InfoTeamsExperiment"
 COPY . .
-RUN dotnet build "FormService.csproj" -c Release -o /app/build
+RUN dotnet build "ZenyaBot.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "FormService.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "ZenyaBot.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FormService.dll", "--environment", "Release"]
+ENTRYPOINT ["dotnet", "ZenyaBot.dll"]

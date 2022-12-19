@@ -8,17 +8,24 @@ namespace ZenyaBot.MessageHandlers;
 /// <inheritdoc />
 public class SaveAsDraftFormMessageHandler : ITeamsActionHandler
 {
+    private readonly IConfiguration config;
     private readonly ILogger<SaveAsDraftFormMessageHandler> logger;
     private readonly IHttpClientFactory clientFactory;
 
-    public SaveAsDraftFormMessageHandler(ILogger<SaveAsDraftFormMessageHandler> logger, IHttpClientFactory clientFactory)
+    public SaveAsDraftFormMessageHandler(
+        IConfiguration config,
+        ILogger<SaveAsDraftFormMessageHandler> logger,
+        IHttpClientFactory clientFactory)
     {
+        this.config = config;
         this.logger = logger;
         this.clientFactory = clientFactory;
     }
 
     /// <inheritdoc />
     public bool CanHandle(CustomActionType type) => type == CustomActionType.SaveAsDraft;
+
+    private string FormServiceUrl => this.config.GetSection("Services")["FormService"];
 
     /// <inheritdoc />
     public async Task Handle(ITurnContext turnContext, IDictionary<string, object> messageData, CancellationToken cancellation = default)
@@ -45,7 +52,7 @@ public class SaveAsDraftFormMessageHandler : ITeamsActionHandler
         }
 
         var client = this.clientFactory.CreateClient();
-        var path = "https://localhost:7072/form/";
+        var path = this.FormServiceUrl + "form/";
         var response = await client.PostAsJsonAsync(path, form, cancellation);
         var json = await response.Content.ReadAsStringAsync();
         var test = JsonConvert.DeserializeObject<DraftDTO>(json);

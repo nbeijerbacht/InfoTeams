@@ -7,17 +7,24 @@ namespace ZenyaBot.MessageHandlers;
 /// <inheritdoc />
 public class SubmitFormActionHandler : ITeamsActionHandler
 {
+    private readonly IConfiguration config;
     private readonly ILogger<SubmitFormActionHandler> logger;
     private readonly IHttpClientFactory clientFactory;
 
-    public SubmitFormActionHandler(ILogger<SubmitFormActionHandler> logger, IHttpClientFactory clientFactory)
+    public SubmitFormActionHandler(
+        IConfiguration config,
+        ILogger<SubmitFormActionHandler> logger,
+        IHttpClientFactory clientFactory)
     {
+        this.config = config;
         this.logger = logger;
         this.clientFactory = clientFactory;
     }
 
     /// <inheritdoc />
     public bool CanHandle(CustomActionType type) => type == CustomActionType.SubmitForm;
+
+    private string FormServiceUrl => this.config.GetSection("Services")["FormService"];
 
     /// <inheritdoc />
     public async Task Handle(ITurnContext turnContext, IDictionary<string, object> messageData, CancellationToken cancellation = default)
@@ -43,9 +50,9 @@ public class SubmitFormActionHandler : ITeamsActionHandler
         }
 
         var client = this.clientFactory.CreateClient();
-        var path = "https://localhost:7072/form/";
+        var path = this.FormServiceUrl + "form/";
         var response = await client.PostAsJsonAsync(path, form, cancellation);
-        
+
         if (response.IsSuccessStatusCode)
         {
             await turnContext.SendActivityAsync("Form submitted succesfully");

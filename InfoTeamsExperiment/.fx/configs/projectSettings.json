@@ -43,7 +43,7 @@
             "build": true,
             "provision": true,
             "folder": "",
-            "artifactFolder": "bin\\Release\\net6.0\\win-x86\\publish",
+            "artifactFolder": "bin\\Release\\net6.0\\publish",
             "capabilities": [
                 "command-response"
             ],

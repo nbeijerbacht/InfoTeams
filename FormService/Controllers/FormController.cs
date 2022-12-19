@@ -12,6 +12,7 @@ namespace FormService.Controllers;
 [Route("[controller]")]
 public class FormController : ControllerBase
 {
+    private readonly IConfiguration config;
     private readonly ILogger<FormController> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IAdaptiveCardRenderer renderer;
@@ -19,12 +20,14 @@ public class FormController : ControllerBase
     private readonly IEnumerable<IFieldHandler> fieldHandlers;
 
     public FormController(
+        IConfiguration config,
         ILogger<FormController> logger,
         IHttpClientFactory httpClientFactory,
         IAdaptiveCardRenderer rederer,
         ILookUpFieldInjector lookupHandler,
         IEnumerable<IFieldHandler> fieldHandlers)
     {
+        this.config = config;
         _logger = logger;
         _httpClientFactory = httpClientFactory;
         this.renderer = rederer;
@@ -32,12 +35,15 @@ public class FormController : ControllerBase
         this.fieldHandlers = fieldHandlers;
     }
 
+    private string FacadeUrl => this.config.GetSection("Services")["FacadeService"];
+
     [HttpGet]
     public async Task<SearchResultDTO> Search([FromQuery(Name = "search")] string search)
     {
         var client = this._httpClientFactory.CreateClient();
+        var path = $"{FacadeUrl}reporterForm?search={search}";
 
-        var response = await client.GetAsync($"https://localhost:7071/reporterForm?search={search}");
+        var response = await client.GetAsync(path);
         var json = await response.Content.ReadAsStringAsync();
         var formData = JsonConvert.DeserializeObject<List<ReportFormDTO>>(json);
 
@@ -74,7 +80,7 @@ public class FormController : ControllerBase
     {
         var client = this._httpClientFactory.CreateClient();
 
-        var response = await client.GetAsync($"https://localhost:7071/reporterForm/{form_id}");
+        var response = await client.GetAsync($"{FacadeUrl}reporterForm/{form_id}");
 
         if (response.StatusCode == HttpStatusCode.NotFound) return this.NotFound();
 
@@ -98,7 +104,7 @@ public class FormController : ControllerBase
     {
         var client = this._httpClientFactory.CreateClient();
 
-        var formResponse = await client.GetAsync($"https://localhost:7071/reporterForm/{formInput.form_id}");
+        var formResponse = await client.GetAsync($"{FacadeUrl}reporterForm/{formInput.form_id}");
         var json = await formResponse.Content.ReadAsStringAsync();
         var formData = JsonConvert.DeserializeObject<ReportFormDTO>(json);
 
@@ -125,7 +131,7 @@ public class FormController : ControllerBase
             if (output != null) formOut.fields.Add(output);
         }
 
-        var postResponse = await client.PostAsJsonAsync($"https://localhost:7071/reporterForm/", formOut);
+        var postResponse = await client.PostAsJsonAsync($"{FacadeUrl}reporterForm/", formOut);
 
         Response.StatusCode = (int)postResponse.StatusCode;
         Response.ContentType = "application/json; charset=utf-8";

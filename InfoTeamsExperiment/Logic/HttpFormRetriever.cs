@@ -12,14 +12,21 @@ namespace ZenyaBot.Logic;
 
 public class HttpFormRetriever : IFormRetriever
 {
+    private readonly IConfiguration config;
     private readonly ILogger<HttpFormRetriever> logger;
     private readonly IHttpClientFactory clientFactory;
 
-    public HttpFormRetriever(ILogger<HttpFormRetriever> logger, IHttpClientFactory clientFactory)
+    public HttpFormRetriever(
+        IConfiguration config,
+        ILogger<HttpFormRetriever> logger,
+        IHttpClientFactory clientFactory)
     {
+        this.config = config;
         this.logger = logger;
         this.clientFactory = clientFactory;
     }
+
+    private string FormServiceUrl => this.config.GetSection("Services")["FormService"];
 
     public async Task<AdaptiveCard> GetCardByFormId(string formId, string lookUpField = "", string lookUpQuery = "")
     {
@@ -29,7 +36,7 @@ public class HttpFormRetriever : IFormRetriever
             {"lookupFieldId", lookUpField },
             {"lookupFieldQuery", lookUpQuery },
         };
-        var path = $"https://localhost:7072/form/{formId}{query}";
+        var path = $"{this.FormServiceUrl}form/{formId}{query}";
 
         var response = await client.GetAsync(path);
 
