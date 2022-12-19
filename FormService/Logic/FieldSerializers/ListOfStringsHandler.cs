@@ -1,6 +1,6 @@
 ﻿using FormService.DTO;
 
-namespace FormService.Logic;
+namespace FormService.Logic.FieldSerializers;
 
 public class ListOfStringsHandler : IFieldHandler
 {
