@@ -30,7 +30,6 @@ public class AdaptiveCardRenderer : IAdaptiveCardRenderer
             IsVisible = false,
             Value = formData.form_id.ToString(),
             Id = "form_id",
-            Label = "",
         });
 
         return adaptiveCard;
