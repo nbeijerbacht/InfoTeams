@@ -1,13 +1,13 @@
 ﻿using AdaptiveCards;
 using FormService.DTO;
 
-namespace FormService.Logic;
+namespace FormService.Logic.ElementRenderers;
 
 public class IgnoreRenderer : IElementRenderer
 {
     private static string[] _ignoreElementTypes = new string[]
     {
-        "page_break",
+        "page_break", "horizontal_line"
     };
     private static string[] _ignoreFieldTypes = new string[]
     {

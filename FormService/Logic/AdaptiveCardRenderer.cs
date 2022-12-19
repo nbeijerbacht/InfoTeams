@@ -21,9 +21,15 @@ public class AdaptiveCardRenderer : IAdaptiveCardRenderer
         };
 
         foreach (var a in formData.design.elements)
-                if (a?.field?.required == true)
-                    if (adaptiveCard.Body[a.element_id] is AdaptiveInput inp)
-                        inp.IsRequired = true;
+            if (a?.field?.required == true)
+            {
+                var element = adaptiveCard.Body
+                    .Where(e => e.Id == a?.field?.field_id.ToString())
+                    .FirstOrDefault();
+
+                if (element is AdaptiveInput inp)
+                    inp.IsRequired = true;
+            }
 
         adaptiveCard.Body.Add(new AdaptiveTextInput
         {
@@ -37,7 +43,10 @@ public class AdaptiveCardRenderer : IAdaptiveCardRenderer
 
     private IEnumerable<AdaptiveElement> ParseElement(Element e)
     {
-        var render = renderers.FirstOrDefault(r => r.CanHandle(e)) ?? throw new CannotRenderElement(e);
+        var render = renderers
+            .FirstOrDefault(r => r.CanHandle(e)) 
+            ?? new UnhandlebleFieldRenderer();
+
         return render.RenderElements(e);
     }
 }

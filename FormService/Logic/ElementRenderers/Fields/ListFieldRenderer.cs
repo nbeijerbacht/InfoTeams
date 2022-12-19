@@ -2,7 +2,7 @@
 using FormService.DTO;
 using Newtonsoft.Json.Linq;
 
-namespace FormService.Logic;
+namespace FormService.Logic.ElementRenderers.Fields;
 
 public class ListFieldRenderer : IElementRenderer
 {

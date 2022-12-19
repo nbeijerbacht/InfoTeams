@@ -2,7 +2,7 @@
 using FormService.DTO;
 using Newtonsoft.Json;
 
-namespace FormService.Logic;
+namespace FormService.Logic.ElementRenderers.Fields;
 
 public class PositionFieldRenderer : IElementRenderer
 {

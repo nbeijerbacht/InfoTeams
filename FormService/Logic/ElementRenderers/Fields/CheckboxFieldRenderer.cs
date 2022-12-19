@@ -1,7 +1,7 @@
 ﻿using AdaptiveCards;
 using FormService.DTO;
 
-namespace FormService.Logic.Field_Types;
+namespace FormService.Logic.ElementRenderers.Fields;
 
 public class CheckboxFieldRenderer : IElementRenderer
 {

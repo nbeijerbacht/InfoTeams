@@ -43,7 +43,7 @@ public class TeamsBot : ActivityHandler
 
         this.logger.LogWarning("Bot received a message without text and without value");
         return Task.CompletedTask;
-        
+
         async Task ExecuteCommand()
         {
             ITeamsCommandHandler? handler = this.commands
