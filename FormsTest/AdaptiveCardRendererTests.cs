@@ -110,22 +110,28 @@ public class AdaptiveCardRendererTests
     }
 
     [Fact]
-    public void ThrowsIfCannotRender()
+    public void HandlesUnhandlableFieldsGracefully()
     {
-        Action act = () =>
+        var card = this.renderer.Render(new ReportFormDTO
         {
-            var card = this.renderer.Render(new ReportFormDTO
+            design = new DesignDTO
             {
-                design = new DesignDTO
+                elements =
                 {
-                    elements =
+                    new Element()
                     {
-                        new Element(),
-                    }
+                        element_type = "some_type",
+                        field = new Field
+                        {
+                            type = "some_field_type",
+                        }
+                    },
                 }
-            });
-        };
+            }
+        });
 
-        act.Should().Throw<CannotRenderElement>();
+        var text = card.Body.First();
+        text.Should().BeOfType<AdaptiveTextBlock>();
+        (text as AdaptiveTextBlock)!.Text.Should().ContainAll("Cannot render", "some_type", "some_field_type");
     }
 }
